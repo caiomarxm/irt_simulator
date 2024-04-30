@@ -3,6 +3,7 @@ from typing import Generator
 
 from core.settings import settings
 from models import User, UserCreate
+from repositories.user import create_user
 
 
 engine = create_engine(str(settings.DATABASE_URI))
@@ -24,8 +25,4 @@ def init_db(session: Session) -> None:
         )
 
         # TO-DO: create user
-
-
-def get_session() -> Generator[Session, None, None]:
-    with Session(engine) as session:
-        yield session
+        create_user(user_in=user_in, session=session)
