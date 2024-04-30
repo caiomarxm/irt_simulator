@@ -16,8 +16,9 @@ class UserCreate(UserBase):
 
 class UserUpdate(UserBase):
     email: Optional[str] = None
-    password: Optional[str] = None
+    hashed_password: Optional[str] = None
 
 
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    hashed_password: Optional[str] = None
