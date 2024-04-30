@@ -3,14 +3,16 @@ FROM python:3.12-alpine
 WORKDIR /var/www
 COPY . .
 
-RUN --mount=type=cache,target=/root/.cache/pip \
-    --mount=type=bind,source=requirements.txt,target=requirements.txt \
-    python -m pip install -r requirements.txt
-
+RUN python -m pip install -r requirements.txt
 
 ENV PYTHONDONTWRITEBYTECODE true
 
 EXPOSE 5000
 
+
 WORKDIR /var/www/src
+
+# Starting db
+# RUN python /var/www/src/init_db.py
+
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000"]

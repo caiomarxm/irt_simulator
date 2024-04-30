@@ -1,0 +1,48 @@
+version: '3.8'
+
+
+networks:
+  irt_network:
+
+
+volumes:
+  irt_db_data:
+
+
+services:
+  irt_db:
+    image: postgres:16
+    restart: always
+    volumes:
+      - irt_db_data:/var/lib/postgresql/data/pgdata
+    networks:
+      - irt_network
+    env_file:
+      - ./backend/.env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+  irt_backend:
+    build:
+      context: ./backend
+    command: sh -c "python init_db.py && uvicorn app:app --host 0.0.0.0 --reload --port 5000"
+    ports:
+      - "30123:5000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/var/www
+    networks:
+      - irt_network
+    depends_on:
+      - irt_db
+    
+  adminer:
+    image: adminer
+    restart: always
+    networks:
+      - irt_network
+    depends_on:
+      - irt_db
+    ports:
+      - "30124:8080"
