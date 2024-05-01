@@ -1,19 +1,28 @@
-import "./App.css";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen";
+import {
+  RouterProvider,
+  createRoutesFromElements,
+  createBrowserRouter,
+  Route,
+} from "react-router-dom";
+import RootLayout from "./layouts/RootLayout";
+import { Admin } from "./pages/Admin";
+import { LoginPage } from "./pages/LoginPage";
 
-const router = createRouter({ routeTree });
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router
-  }
-}
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    [<Route path="/" element={ <RootLayout /> } >
+
+    </Route>,
+    <Route path="/admin" element={ <RootLayout /> } >
+      <Route index element={ <Admin />} />
+    </Route>,
+    <Route path="/login" element={ <LoginPage /> } />
+  ])
+)
 
 function App() {
   return (
-    <>
       <RouterProvider router={router} />
-    </>
   );
 }
 
