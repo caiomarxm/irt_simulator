@@ -3,7 +3,6 @@ from core.security import hash_password, verify_password
 
 from models.user import (
     User,
-    UserBase,
     UserCreate,
     UserUpdate
 )
