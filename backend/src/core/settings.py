@@ -1,5 +1,6 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from datetime import timedelta
 
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic_core import MultiHostUrl
 
 from pydantic import (
@@ -16,6 +17,10 @@ class Settings(BaseSettings):
     )
 
     API_V1_URL: str = 'api/v1'
+
+    # Defining access token with 7 days duration
+    ACCESS_TOKEN_DURATION_IN_MINUTES: timedelta = timedelta(minutes=60*24*7)
+
     POSTGRES_SERVER: str
     POSTGRES_PORT: int = 5432
     POSTGRES_USER: str
