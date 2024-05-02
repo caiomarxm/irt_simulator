@@ -1,5 +1,5 @@
 from sqlmodel import Session, select
-from core.security import hash_password
+from core.security import hash_password, verify_password
 
 from models.user import (
     User,
@@ -41,3 +41,15 @@ def get_user_by_email(email: str, session: Session) -> User | None:
     statement = select(User).where(User.email == email)
     session_user = session.exec(statement).first()
     return session_user
+
+
+def authenticate(email: str, password: str, session: Session) -> User | None:
+    user = get_user_by_email(session=session, email=email)
+
+    if not user:
+        return None
+
+    if not verify_password(password, user.hashed_password):
+        return None
+
+    return user
