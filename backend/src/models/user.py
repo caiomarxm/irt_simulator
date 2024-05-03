@@ -22,3 +22,7 @@ class UserUpdate(UserBase):
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     hashed_password: Optional[str] = None
+
+
+class UserPublic(UserBase):
+    id: int
