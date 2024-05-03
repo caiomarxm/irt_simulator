@@ -20,6 +20,7 @@ class Settings(BaseSettings):
 
     # Defining access token with 7 days duration
     ACCESS_TOKEN_DURATION_IN_MINUTES: timedelta = timedelta(minutes=60*24*7)
+    SECRET_KEY: str
 
     POSTGRES_SERVER: str
     POSTGRES_PORT: int = 5432
