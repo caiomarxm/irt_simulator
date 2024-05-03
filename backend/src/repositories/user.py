@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlmodel import Session, select
 from core.security import hash_password, verify_password
 
@@ -40,6 +41,21 @@ def get_user_by_email(email: str, session: Session) -> User | None:
     statement = select(User).where(User.email == email)
     session_user = session.exec(statement).first()
     return session_user
+
+
+def get_user_by_id(user_id: int, session: Session, current_user) -> User | None:
+    user = session.get(User, user_id)
+
+    if user == current_user:
+        return user
+
+    if not current_user.is_superuser:
+        raise HTTPException(
+            status_code=403,
+            detail="The user doesn't have enough privileges",
+        )
+
+    return user
 
 
 def authenticate(email: str, password: str, session: Session) -> User | None:
