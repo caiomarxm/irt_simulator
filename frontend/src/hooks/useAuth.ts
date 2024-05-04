@@ -39,12 +39,15 @@ export function useAuth() {
 
   const performLogout = () => {
     localStorage.removeItem("accessToken")
+    localStorage.removeItem("userData")
     navigate("/login")
   }
 
   const loginMutation = useMutation({
     mutationFn: performLogin,
-    onSuccess: () => {
+    onSuccess: async () => {
+      const user = await UserService.readUserMe()
+      localStorage.setItem("userData", JSON.stringify(user))
       navigate("/")
     },
     onError: (err: ApiError) => {
