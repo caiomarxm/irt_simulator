@@ -10,7 +10,7 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { FormEvent, FormEventHandler, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { AccessTokenRequestBody } from "../client/models/token";
 import { Form } from "react-router-dom";
@@ -24,7 +24,7 @@ export const LoginPage = () => {
 
   const { loginMutation, error, resetError } = useAuth()
 
-  const handleLogin = async (event: Event) => {
+  const handleLogin: FormEventHandler<HTMLFormElement> = async (event: FormEvent) => {
     event.preventDefault()
     resetError()
     try {
