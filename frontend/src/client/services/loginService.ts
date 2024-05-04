@@ -1,3 +1,4 @@
+import { AxiosPromise } from "axios";
 import { httpClient } from "../core/httpClient";
 import {
   AccessTokenRequestBody,
@@ -11,12 +12,8 @@ export type LoginFormData = {
 export class LoginService {
   public static async loginAccessToken(
     data: LoginFormData
-  ): Promise<AccessTokenResponseBody> {
+  ): AxiosPromise<AccessTokenResponseBody> {
 
-    return httpClient.postForm("/login/token", data, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    })
+    return httpClient.postForm("/login/token", data.formData);
   }
 }
