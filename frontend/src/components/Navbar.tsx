@@ -11,9 +11,11 @@ import { UnlockIcon } from "@chakra-ui/icons";
 import useAuth from "../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { UserPublic } from "../client/models/user";
+import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
   const toast = useToast();
+  const navigate = useNavigate()
 
   const { performLogout } = useAuth();
   const [user, setUser] = useState<UserPublic|null>(null)
@@ -24,6 +26,10 @@ export const Navbar = () => {
     setUser(localStorageUserObject)
   }, [])
 
+  const handleAvatarClick = () => {
+    navigate("/profile")
+  }
+
   return (
     <Flex as="nav" p="10px" mb="60px" alignItems="center">
       <Heading as="h1" fontSize="1.5em">
@@ -31,7 +37,7 @@ export const Navbar = () => {
       </Heading>
       <Spacer />
       <Flex wrap="wrap">
-        <Avatar bg="blue.600" marginRight={5}></Avatar>
+        <Avatar bg="blue.600" marginRight={5} onClick={handleAvatarClick} _hover={{cursor: "pointer"}}></Avatar>
         <Text marginRight={5}>{user?.email}</Text>
         <Button
           colorScheme="blue"
