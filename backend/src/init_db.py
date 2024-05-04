@@ -4,6 +4,7 @@ from sqlmodel import Session, select
 from core.db import engine
 from core.settings import settings
 
+from models import *
 from models.user import User, UserCreate
 
 from repositories.user import create_user
@@ -32,10 +33,15 @@ def init_db(session: Session) -> None:
         create_user(user_in=user_in, session=session)
 
 
+def create_first_exam(session: Session):
+    ...
+
+
 def init() -> None:
     with Session(engine) as session:
         logger.info(f"Creating db...")
         init_db(session=session)
+        create_first_exam(session=session)
         logger.info(f"Db created")
 
 
