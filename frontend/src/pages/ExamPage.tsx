@@ -1,20 +1,39 @@
-import { Button, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
+import {
+  Flex,
+  Spinner,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text,
+} from "@chakra-ui/react";
 import { Quiz } from "../components/quiz/Quiz";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useCurrentExam } from "../hooks/useCurrentExam";
 
 export const ExamPage = () => {
-  const [isOpenForSubmission, setIsOpenForSubmission] = useState<boolean>(false)
+  const { data, isLoading, isOpenForSubmission } = useCurrentExam();
 
   // TODO: useEffect to see if the quizz is currently available to submissions
-  useEffect(() => {
-    setIsOpenForSubmission(true)
-  }, [])
+  useEffect(() => {}, []);
 
-  // TODO: fetch if user already took the quizz and submitted any anwers
+  if (isLoading) {
+    return (
+      <Flex justifyContent="center" alignItems="center">
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
+      </Flex>
+    );
+  }
 
   return (
     <>
-      <Button onClick={() => {setIsOpenForSubmission(!isOpenForSubmission)}}>Change Open (Temporary)</Button>
       <Tabs>
         <TabList>
           <Tab>Current Exam</Tab>
@@ -23,14 +42,19 @@ export const ExamPage = () => {
 
         <TabPanels>
           <TabPanel>
-            <Text>
-              Some informational data about the quizz here
-            </Text>
-            { isOpenForSubmission ? <Text>Looks like the quizz is open for submission!</Text> : <></> }
+            <Text>Some informational data about the quizz here</Text>
+            {isOpenForSubmission ? (
+              <Text>Looks like the quizz is open for submission!</Text>
+            ) : (
+              <></>
+            )}
           </TabPanel>
 
           <TabPanel>
-            <Quiz isOpenForSubmition={isOpenForSubmission} />
+            <Quiz
+              isOpenForSubmition={isOpenForSubmission}
+              questions={data?.questions}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>
