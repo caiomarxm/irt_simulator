@@ -1,5 +1,15 @@
-from sqlmodel import SQLModel, Field
-from typing import Optional
+from sqlmodel import SQLModel, Field, Relationship
+from typing import Optional, List
+
+
+class ExamCreate(SQLModel):
+    year: int
+
+
+class ExamUpdate(SQLModel):
+    year: int
+    is_closed: bool = True
+    is_committed: bool = False
 
 
 class Exam(SQLModel, table=True):
@@ -7,3 +17,6 @@ class Exam(SQLModel, table=True):
     year: int
     is_closed: bool = True
     is_committed: bool = False
+
+    questions: Optional[List["Question"]] = Relationship(back_populates="exam")
+    submissions: Optional[List["Submission"]] = Relationship(back_populates="exam")
