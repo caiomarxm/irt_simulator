@@ -4,7 +4,7 @@
     "questions": [
       {
         "question": "Which of the alternatives has only Marvel characters?",
-        "options": "Iron Man, Flash and Hulk;Wolverine,Spiderman and Shazam;Black Widow, Vision and Antman;Naruto, Doctor Strange and Static Shock; Superman, Aquaman and Starlord",
+        "options": "Iron Man, Flash and Hulk;Wolverine,Spiderman and Shazam;Black Widow, Vision and Antman;Naruto, Doctor Strange and Static Shock;Superman, Aquaman and Starlord",
         "correct_response_index": 2,
         "difficulty": 1
       },
