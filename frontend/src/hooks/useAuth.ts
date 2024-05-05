@@ -6,7 +6,7 @@ import { UserPublic } from "../client/models/user";
 import { UserService } from "../client/services/userService";
 import { AccessTokenRequestBody } from "../client/models/token";
 import { ApiError } from "../client/models/apiError";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosPromise } from "axios";
 import { useToast } from "@chakra-ui/react";
 
 const isLoggedIn = () => {
@@ -14,7 +14,7 @@ const isLoggedIn = () => {
 }
 
 const isAdminLoggedIn = async () => {
-  const user = await UserService.readUserMe()
+  const user = (await UserService.readUserMe()).data
   return user.is_superuser
 }
 
@@ -24,7 +24,7 @@ export function useAuth() {
   const navigate = useNavigate()
   const toast = useToast()
 
-  const { data: user, isLoading } = useQuery<UserPublic | null, Error>({
+  const { data: user, isLoading } = useQuery<AxiosPromise<UserPublic | null, Error>>({
     queryKey: ["currentUser"],
     queryFn: UserService.readUserMe,
     enabled: isLoggedIn(),
