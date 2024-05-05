@@ -2,11 +2,11 @@ import { Box, Button, Divider, HStack, Heading, Text } from "@chakra-ui/react";
 import { Form } from "react-router-dom";
 import { Question } from "./Question";
 
-type QuizzProps = {
+type QuizProps = {
   isOpenForSubmition: boolean
 }
 
-export const Quizz = ({ isOpenForSubmition }: QuizzProps) => {
+export const Quiz = ({ isOpenForSubmition }: QuizProps) => {
   const questions = [
     { question: "Question foo", options: ["1", "2", "3"] },
     { question: "Question bar", options: ["4", "5", "6"] },

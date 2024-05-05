@@ -36,7 +36,7 @@ export const Navbar = () => {
         Welcome, {user?.full_name?.split(" ")[0]}
       </Heading>
       <Spacer />
-      <Flex wrap="wrap">
+      <Flex wrap="wrap" alignItems="center">
         <Avatar bg="blue.600" marginRight={5} onClick={handleAvatarClick} _hover={{cursor: "pointer"}}></Avatar>
         <Text marginRight={5}>{user?.email}</Text>
         <Button
