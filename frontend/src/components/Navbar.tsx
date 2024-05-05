@@ -22,7 +22,7 @@ export const Navbar = () => {
 
   useEffect(() => {
     const userString: string = localStorage.getItem('userData') ?? ""
-    const localStorageUserObject = JSON.parse(userString).data
+    const localStorageUserObject = JSON.parse(userString)
     setUser(localStorageUserObject)
   }, [])
 

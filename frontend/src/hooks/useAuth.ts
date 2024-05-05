@@ -46,7 +46,7 @@ export function useAuth() {
   const loginMutation = useMutation({
     mutationFn: performLogin,
     onSuccess: async () => {
-      const user = await UserService.readUserMe()
+      const user = (await UserService.readUserMe()).data
       localStorage.setItem("userData", JSON.stringify(user))
       navigate("/")
     },
