@@ -1,7 +1,7 @@
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, List, Annotated
 
-from pydantic import BeforeValidator
+from pydantic import BeforeValidator, Field as PydanticField
 
 from models.exams import Exam
 
@@ -27,3 +27,5 @@ class Question(QuestionBase, table=True):
 
 class QuestionOut(QuestionBase):
     options: Annotated[List[str], BeforeValidator(lambda ops: ops.split(';'))]
+    correct_response_index: Annotated[int, PydanticField(exclude=True)]
+    difficulty: Annotated[int, PydanticField(exclude=True)]
