@@ -7,9 +7,9 @@ class ExamCreate(SQLModel):
 
 
 class ExamUpdate(SQLModel):
-    year: int
-    is_closed: bool = True
-    is_committed: bool = False
+    year: Optional[int] = None
+    is_closed: Optional[bool] = None
+    is_committed: Optional[bool] = None
 
 
 class Exam(SQLModel, table=True):
