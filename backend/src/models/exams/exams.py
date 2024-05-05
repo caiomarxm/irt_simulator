@@ -12,7 +12,14 @@ class ExamUpdate(SQLModel):
     is_committed: Optional[bool] = None
 
 
-class Exam(SQLModel, table=True):
+class ExamBase(SQLModel):
+    id: Optional[int]
+    year: int
+    is_closed: bool = True
+    is_committed: bool = False
+
+
+class Exam(ExamBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     year: int
     is_closed: bool = True
