@@ -1,3 +1,4 @@
+import json
 import logging
 from sqlmodel import Session, select
 
@@ -10,8 +11,11 @@ from models.user import User, UserCreate
 from repositories.user import create_user
 
 
+SAMPLE_EXAM_FILE = '../sample/exam.json'
+
+
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("init_db")
 
 def init_db(session: Session) -> None:
     from sqlmodel import SQLModel
@@ -34,7 +38,32 @@ def init_db(session: Session) -> None:
 
 
 def create_first_exam(session: Session):
-    ...
+    with open(SAMPLE_EXAM_FILE, 'r') as sample_exam_file:
+        sample_exam_dict = json.load(sample_exam_file).get('exam')
+
+        sample_exam = Exam(year=sample_exam_dict.get('year'))
+        db_exam = session.exec(select(Exam).where(Exam.year == sample_exam.year)).first()
+
+        if not db_exam:
+            session.add(sample_exam)
+            session.commit()
+            session.refresh(sample_exam)
+        else:
+            sample_exam.id = db_exam.id
+
+        db_questions = session.exec(select(Question).where(Question.exam_id == sample_exam.id)).all()
+
+        if len(db_questions) == 0:
+            # If there are no questions for current exam, create sample questions
+            sample_questions = []
+            for sample_question_dict in sample_exam_dict.get('questions'):
+                sample_question_dict['exam_id'] = sample_exam.id
+                sample_questions.append(Question.model_validate(sample_question_dict))
+            
+            session.add_all(sample_questions)
+            session.commit()
+    
+    return True
 
 
 def init() -> None:
