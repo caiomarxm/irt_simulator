@@ -17,11 +17,11 @@ export const Question = ({ index, question, options }: Props) => {
   const [value, setValue] = useState<string>("")
 
   const optionsList = options.map((option, i) => {
-    return <Radio value={`${i}`}>{option}</Radio>;
+    return <Radio key={i} value={`${i}`}>{option}</Radio>;
   });
 
   return (
-    <FormControl key={index}>
+    <FormControl>
       <FormLabel as="legend">{`${index}) ${question}`}</FormLabel>
       <RadioGroup mb={10} onChange={setValue} value={value}>
         <VStack spacing={5} alignItems="left">{optionsList}</VStack>
