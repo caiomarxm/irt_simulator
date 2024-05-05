@@ -1,5 +1,7 @@
-from sqlmodel import SQLModel, Field
-from typing import Optional
+from sqlmodel import SQLModel, Field, Relationship
+from typing import Optional, List
+
+from models.exams import Exam
 
 
 class Question(SQLModel, table=True):
@@ -10,3 +12,6 @@ class Question(SQLModel, table=True):
     difficulty: int
 
     exam_id: int = Field(foreign_key="exam.id")
+    exam: Exam = Relationship(back_populates="questions")
+
+    answers: Optional[List["Answer"]] = Relationship(back_populates="question")
