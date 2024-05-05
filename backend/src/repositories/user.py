@@ -46,6 +46,7 @@ def get_user_by_email(email: str, session: Session) -> User | None:
 def get_user_by_id(user_id: int, session: Session, current_user) -> User | None:
     user = session.get(User, user_id)
 
+    # TODO: Move verifications to USE CASE!!!
     if user == current_user:
         return user
 
