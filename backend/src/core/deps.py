@@ -53,3 +53,12 @@ def get_current_user_from_token(session: InjectSession, token: InjectJWT) -> Use
     return user
 
 InjectCurrentUser = Annotated[User, Depends(get_current_user_from_token)]
+
+
+def get_current_user_superuser(user: InjectCurrentUser):
+    if not user.is_superuser:
+        raise HTTPException(status_code=401, detail="You're not allowed on this route.")
+    
+    return user
+
+InjectIsSuperuser = Annotated[User, Depends(get_current_user_superuser)]
