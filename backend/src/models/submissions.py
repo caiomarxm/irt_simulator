@@ -1,5 +1,8 @@
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional
+
+from models.user import User
+from models.exams import Exam
 
 
 class Submission(SQLModel, table=True):
@@ -8,4 +11,7 @@ class Submission(SQLModel, table=True):
     result: Optional[float]
 
     user_id: int = Field(foreign_key="user.id")
+    user: User = Relationship(back_populates="submissions")
+
     exam_id: int = Field(foreign_key="exam.id")
+    exam: Exam = Relationship(back_populates="submissions")
