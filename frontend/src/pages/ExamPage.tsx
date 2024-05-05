@@ -1,5 +1,5 @@
 import { Button, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
-import { Quizz } from "../components/quizz/Quizz";
+import { Quiz } from "../components/quiz/Quiz";
 import { useEffect, useState } from "react";
 
 export const ExamPage = () => {
@@ -30,7 +30,7 @@ export const ExamPage = () => {
           </TabPanel>
 
           <TabPanel>
-            <Quizz isOpenForSubmition={isOpenForSubmission} />
+            <Quiz isOpenForSubmition={isOpenForSubmission} />
           </TabPanel>
         </TabPanels>
       </Tabs>
