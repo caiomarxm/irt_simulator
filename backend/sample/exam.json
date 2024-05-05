@@ -1,67 +1,67 @@
 {
-    "exam": {
-        "year": 2024
-    },
+  "exam": {
+    "year": 2024,
     "questions": [
-        {
-            "question": "Which of the alternatives has only Marvel characters?",
-            "options": "Iron Man, Flash and Hulk;Wolverine,Spiderman and Shazam;Black Widow, Vision and Antman;Naruto, Doctor Strange and Static Shock; Superman, Aquaman and Starlord",
-            "correct_response_index": 2,
-            "difficulty": 1
-        },
-        {
-            "question": "What's the name of the dragon from the movie 'The Hobbit'?",
-            "options": "Smaug;Dragonball;Toothless;Python;Javascript",
-            "correct_response_index": 0,
-            "difficulty": 1
-        },
-        {
-            "question": "Little John bought 5000 oranges and ate 200. How many oranges are left?",
-            "options": "I knew this one, but with apples...;42;3.141592...;Little John has been unemployed for too long;4800",
-            "correct_response_index": 4,
-            "difficulty": 1
-        },
-        {
-            "question": "What are Wolverine's claws originally made of?",
-            "options": "Adamantium;Bone;Glass;Vibranium;Banana",
-            "correct_response_index": 0,
-            "difficulty": 2
-        },
-        {
-            "question": "What's the main character of the movie 'Spiderman'?",
-            "options": "Schneiderman;Insiderman;Spiderman;Spikeman;Snyderman",
-            "correct_response_index": 2,
-            "difficulty": 1
-        },
-        {
-            "question": "When Princess Leia told Han Solo that she loved him, what did Han Solo answered before being frozen on carbonite?",
-            "options": "I love you too;I know;Really???;I love you too, but not in that way;Oh dear, you should not!",
-            "correct_response_index": 1,
-            "difficulty": 2
-        },
-        {
-            "question": "What are the elements that can be bend on Avatar: The Legend of Aang?",
-            "options": "Water, Earth, Air, Fire and Heart;Lava, Steam, Dust and Sand;Winter, Summer, Autumn and Spring;Water, Earth, Air and Fire;Water, Earth, Wind and Fire",
-            "correct_response_index": 3,
-            "difficulty": 2
-        },
-        {
-            "question": "How many rings were given to the mankind in Lord of The Rings?",
-            "options": "3;7;9;11;5",
-            "correct_response_index": 2,
-            "difficulty": 2
-        },
-        {
-            "question": "Which of these characters is not from the Guardians of the Galaxy?",
-            "options": "Ironman;Adam Warlock;Thor;Kitty Pryde;Nebula",
-            "correct_response_index": 2,
-            "difficulty": 3
-        },
-        {
-            "question": "Which of these is false on the game Rock-Paper-Scissors-Lizard-Spock?",
-            "options": "Paper disproves Spock;Lizard eats Paper;Spock vaporizes Rock;Scissors decapitates Lizard;Spock vaporizes Lizard",
-            "correct_response_index": 4,
-            "difficulty": 3
-        }
+      {
+        "question": "Which of the alternatives has only Marvel characters?",
+        "options": "Iron Man, Flash and Hulk;Wolverine,Spiderman and Shazam;Black Widow, Vision and Antman;Naruto, Doctor Strange and Static Shock; Superman, Aquaman and Starlord",
+        "correct_response_index": 2,
+        "difficulty": 1
+      },
+      {
+        "question": "What's the name of the dragon from the movie 'The Hobbit'?",
+        "options": "Smaug;Dragonball;Toothless;Python;Javascript",
+        "correct_response_index": 0,
+        "difficulty": 1
+      },
+      {
+        "question": "Little John bought 5000 oranges and ate 200. How many oranges are left?",
+        "options": "I knew this one, but with apples...;42;3.141592...;Little John has been unemployed for too long;4800",
+        "correct_response_index": 4,
+        "difficulty": 1
+      },
+      {
+        "question": "What are Wolverine's claws originally made of?",
+        "options": "Adamantium;Bone;Glass;Vibranium;Banana",
+        "correct_response_index": 0,
+        "difficulty": 2
+      },
+      {
+        "question": "What's the main character of the movie 'Spiderman'?",
+        "options": "Schneiderman;Insiderman;Spiderman;Spikeman;Snyderman",
+        "correct_response_index": 2,
+        "difficulty": 1
+      },
+      {
+        "question": "When Princess Leia told Han Solo that she loved him, what did Han Solo answered before being frozen on carbonite?",
+        "options": "I love you too;I know;Really???;I love you too, but not in that way;Oh dear, you should not!",
+        "correct_response_index": 1,
+        "difficulty": 2
+      },
+      {
+        "question": "What are the elements that can be bend on Avatar: The Legend of Aang?",
+        "options": "Water, Earth, Air, Fire and Heart;Lava, Steam, Dust and Sand;Winter, Summer, Autumn and Spring;Water, Earth, Air and Fire;Water, Earth, Wind and Fire",
+        "correct_response_index": 3,
+        "difficulty": 2
+      },
+      {
+        "question": "How many rings were given to the mankind in Lord of The Rings?",
+        "options": "3;7;9;11;5",
+        "correct_response_index": 2,
+        "difficulty": 2
+      },
+      {
+        "question": "Which of these characters is not from the Guardians of the Galaxy?",
+        "options": "Ironman;Adam Warlock;Thor;Kitty Pryde;Nebula",
+        "correct_response_index": 2,
+        "difficulty": 3
+      },
+      {
+        "question": "Which of these is false on the game Rock-Paper-Scissors-Lizard-Spock?",
+        "options": "Paper disproves Spock;Lizard eats Paper;Spock vaporizes Rock;Scissors decapitates Lizard;Spock vaporizes Lizard",
+        "correct_response_index": 4,
+        "difficulty": 3
+      }
     ]
+  }
 }
