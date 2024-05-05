@@ -1,5 +1,5 @@
-from sqlmodel import SQLModel, Field
-from typing import Optional, Any
+from sqlmodel import SQLModel, Field, Relationship
+from typing import Optional, Any, List
 
 
 class UserBase(SQLModel):
@@ -22,6 +22,8 @@ class UserUpdate(UserBase):
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     hashed_password: Optional[str] = None
+
+    submissions: Optional[List["Submission"]] = Relationship(back_populates="user")
 
 
 class UserPublic(UserBase):
