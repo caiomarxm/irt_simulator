@@ -16,6 +16,10 @@ def create_exam(exam: ExamCreate, session: Session) -> Exam:
     return exam_in
 
 
+def get_all_exams(session: Session):
+    return session.exec(select(Exam)).all()
+
+
 def get_exam_by_id(id: int, session: Session) -> Exam:
     exam = session.get(Exam, id)
     return exam
