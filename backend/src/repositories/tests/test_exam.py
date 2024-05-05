@@ -1,19 +1,35 @@
 import pytest
-from sqlmodel import select, Session
+from sqlmodel import select, Session, text
 
 from core.db import engine
 from models.exams import (Exam, ExamCreate, ExamUpdate)
+from repositories.exams import (
+    get_exam_by_id,
+    get_exam_by_year,
+    create_exam,
+    update_exam,
+    update_exam_by_id
+    )
 
 
-def test_model_exam():
-    new_exam = ExamCreate(year=2025)
-    exam = Exam.model_validate(new_exam)
-    assert isinstance(exam, Exam)
-
-
-def test_db_exam():
+def test_get_exam_by_id():
     with Session(engine) as session:
-        exams = session.exec(select(Exam))
-        exam = exams.one()
-        if exam:
-            assert isinstance(exam, Exam)
+        exam = get_exam_by_id(1, session=session)
+        assert isinstance(exam, (Exam, None))
+
+
+def test_get_exam_by_year():
+    with Session(engine) as session:
+        exam = get_exam_by_year(2024, session=session)
+        assert isinstance(exam, (Exam, None))
+
+
+def test_update_exam():
+    with Session(engine) as session:
+        exam_update = ExamUpdate(is_closed=False)
+        exam = update_exam_by_id(1, exam_update, session)
+        assert exam.is_closed == False
+
+        exam_update.is_closed = True
+        exam = update_exam_by_id(1, exam_update, session)
+        assert exam.is_closed == True
