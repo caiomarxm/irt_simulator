@@ -1,18 +1,14 @@
 import { Box, Button, Divider, HStack, Heading, Text } from "@chakra-ui/react";
 import { Form } from "react-router-dom";
 import { Question } from "./Question";
+import { IQuestion } from "../../client/models/question";
 
 type QuizProps = {
-  isOpenForSubmition: boolean
+  isOpenForSubmition: boolean,
+  questions?: IQuestion[]
 }
 
-export const Quiz = ({ isOpenForSubmition }: QuizProps) => {
-  const questions = [
-    { question: "Question foo", options: ["1", "2", "3"] },
-    { question: "Question bar", options: ["4", "5", "6"] },
-    { question: "Question doe", options: ["7", "8", "9"] },
-  ];
-
+export const Quiz = ({ isOpenForSubmition, questions }: QuizProps) => {
   if (!isOpenForSubmition) {
     return (
       <Box>
@@ -34,9 +30,9 @@ export const Quiz = ({ isOpenForSubmition }: QuizProps) => {
           Please keep in mind that you can only commit this quizz once.
         </Text>
         <Divider mb={5} />
-        {questions.map((item, i) => (
+        {questions?.map((item, i) => (
           <Question
-            key={i}
+            key={item.id}
             index={i + 1}
             question={item.question}
             options={item.options}
