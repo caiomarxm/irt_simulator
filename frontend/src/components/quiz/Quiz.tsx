@@ -30,15 +30,19 @@ type QuizProps = {
   isOpenForSubmition: boolean;
   questions?: IQuestion[];
   currentYear: number;
+  isCommited: boolean | undefined;
+  initialAnswers: IAnswer[];
 };
 
 export const Quiz = ({
   isOpenForSubmition,
   questions,
   currentYear,
+  isCommited,
+  initialAnswers,
 }: QuizProps) => {
   // States used by the Quizz
-  const [answers, setAnswers] = useState([] as IAnswer[]);
+  const [answers, setAnswers] = useState(initialAnswers as IAnswer[]);
   const { isOpen, onOpen: openConfirmationModal, onClose } = useDisclosure();
 
   // Hooks
@@ -123,7 +127,6 @@ export const Quiz = ({
   };
 
   // Building the component
-
   if (!isOpenForSubmition) {
     return (
       <Box>
@@ -141,9 +144,16 @@ export const Quiz = ({
         <Heading as="h2" fontSize="1.5em" mb={5}>
           Here's the quiz!
         </Heading>
-        <Text mb={5}>
-          Please keep in mind that you can only submit this quiz once.
-        </Text>
+        <Box display={isCommited ? "none" : ""}>
+          <Text mb={5}>
+            Please keep in mind that you can only submit this quiz once.
+          </Text>
+        </Box>
+        <Box display={!isCommited ? "none" : ""}>
+          <Text mb={5}>
+            You've already submitted a response to this exam. You can still see your responses, but you won't be able to edit them.
+          </Text>
+        </Box>
         <Divider mb={5} />
         {questions?.map((item, i) => (
           <Question
@@ -154,10 +164,15 @@ export const Quiz = ({
             options={item.options}
             answers={answers}
             setAnswers={setAnswers}
+            isCommited={isCommited}
           />
         ))}
         <HStack spacing={5}>
-          <Button colorScheme="green" type="submit">
+          <Button
+            colorScheme="green"
+            type="submit"
+            display={isCommited ? "none" : ""}
+          >
             Submit
           </Button>
           <ConfirmationModal
@@ -166,7 +181,12 @@ export const Quiz = ({
             onOpen={openConfirmationModal}
             submitFn={submitAnswers}
           />
-          <Button onClick={handleClickOnSave}>Save</Button>
+          <Button
+            onClick={handleClickOnSave}
+            display={isCommited ? "none" : ""}
+          >
+            Save
+          </Button>
         </HStack>
       </Form>
     </Box>
