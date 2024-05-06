@@ -23,3 +23,9 @@ class Submission(SubmissionBase, table=True):
     exam: Exam = Relationship(back_populates="submissions")
 
     answers: Optional[List["Answer"]] = Relationship(back_populates="submission")
+
+    def find_answer_index_by_question_id(self, question_id: int):
+        for i, answer in enumerate(self.answers):
+            if answer.question_id == question_id:
+                return answer
+        return None
