@@ -6,6 +6,7 @@ from models.user import User
 
 
 class SubmissionOut(SubmissionBase):
+    id: int
     answers: Optional[List[Answer]]
 
 
