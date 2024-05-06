@@ -13,12 +13,19 @@ type CustomModalProps = {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
+  submitFn: () => Promise<void>;
 };
 
 export default function ConfirmationModal({
   isOpen,
   onClose,
+  submitFn,
 }: CustomModalProps) {
+  const handleSubmit = async () => {
+    await submitFn();
+    onClose();
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -34,7 +41,7 @@ export default function ConfirmationModal({
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={onClose}>
+          <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
             I'm sure!
           </Button>
           <Button variant="ghost" onClick={onClose}>
