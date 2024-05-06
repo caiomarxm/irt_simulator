@@ -12,7 +12,7 @@ import { UnlockIcon } from "@chakra-ui/icons";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
-export const ProfileMenu = () => {
+export const AvatarMenu = () => {
   const userDataString = localStorage.getItem("userData");
   let user;
   if (userDataString) {
