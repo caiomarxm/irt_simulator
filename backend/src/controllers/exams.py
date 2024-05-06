@@ -11,15 +11,14 @@ from repositories.exams import (
 )
 from models.exams import (
     Exam,
-    ExamCreate,
-    ExamUpdate,
-    ExamOut
+    ExamOut,
+    ExamCommited
 )
 
 
 router = APIRouter()
 
-@router.get('', response_model=List[Exam]|Exam|ExamOut|None)
+@router.get('', response_model=List[Exam]|Exam|ExamOut|ExamCommited)
 def read_all_exams(*, session: InjectSession, user: InjectCurrentUser, year: Optional[int] = None, include_questions: bool = False):
     if not year:
         return get_all_exams(session=session)
@@ -29,8 +28,11 @@ def read_all_exams(*, session: InjectSession, user: InjectCurrentUser, year: Opt
     if not exam:
         return Response(status_code=HTTPStatus.NO_CONTENT)
     
-    if include_questions:
+    if include_questions and not exam.is_committed:
         exam = ExamOut.model_validate(exam)
+    
+    if exam.is_committed:
+        exam = ExamCommited.model_validate(exam)
 
     return exam
 

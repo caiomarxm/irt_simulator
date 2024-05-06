@@ -29,3 +29,7 @@ class QuestionOut(QuestionBase):
     options: Annotated[List[str], BeforeValidator(lambda ops: ops.split(';'))]
     correct_response_index: Annotated[int, PydanticField(exclude=True)]
     difficulty: Annotated[int, PydanticField(exclude=True)]
+
+
+class QuestionCommited(QuestionOut):
+    correct_response_index: Annotated[int, PydanticField(exclude=False)]
