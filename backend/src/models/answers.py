@@ -5,9 +5,13 @@ from models.questions import Question
 from models.submissions.submissions import Submission
 
 
-class Answer(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+class AnswerBase(SQLModel):
     response_index: int
+    question_id: int
+
+
+class Answer(AnswerBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
 
     question_id: int = Field(foreign_key="question.id")
     question: Question = Relationship(back_populates="answers")
