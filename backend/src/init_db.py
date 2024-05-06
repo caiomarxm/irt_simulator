@@ -62,6 +62,20 @@ def create_first_exam(session: Session):
             
             session.add_all(sample_questions)
             session.commit()
+        
+        db_submission = session.exec(select(Submission).where(Submission.exam_id == sample_exam.id)).first()
+
+        if not db_submission:
+            submissions = sample_exam_dict.get('submissions')
+            for submission_dict in submissions:
+                submission = Submission(user_id=submission_dict.get('user_id'), exam_id=submission_dict.get('exam_id'))
+                session.add(submission)
+
+                submission_answers = submission_dict.get('answers')
+                for answer_dict in submission_answers:
+                    answer = Answer(**answer_dict, submission=submission)
+                    session.add(answer)
+                session.commit()
     
     return True
 
