@@ -13,7 +13,11 @@ export const useCurrentExam = () => {
   });
 
   const [isOpenForSubmission] = useState<boolean>(
-    !query.data?.data.is_closed ?? false
+    !(query.data?.data.is_closed)
+  )
+
+  const [isExamCommitted] = useState<boolean>(
+    query.data?.data.is_committed
   )
 
   return {
@@ -21,6 +25,7 @@ export const useCurrentExam = () => {
     data: query.data?.data,
     setCurrentYear,
     isOpenForSubmission,
+    isExamCommitted,
     currentYear
   };
 };

@@ -29,7 +29,7 @@ type QuizProps = {
   isOpenForSubmition: boolean;
   questions?: IQuestion[];
   currentYear: number;
-  isCommited: boolean | undefined;
+  isSubmissionCommitted: boolean | undefined;
   initialAnswers: IAnswer[];
 };
 
@@ -37,7 +37,7 @@ export const Quiz = ({
   isOpenForSubmition,
   questions,
   currentYear,
-  isCommited,
+  isSubmissionCommitted,
   initialAnswers,
 }: QuizProps) => {
   // States used by the Quizz
@@ -140,12 +140,12 @@ export const Quiz = ({
         <Heading as="h2" fontSize="1.5em" mb={5}>
           Here's the quiz!
         </Heading>
-        <Box display={isCommited ? "none" : ""}>
+        <Box display={isSubmissionCommitted ? "none" : ""}>
           <Text mb={5}>
             Please keep in mind that you can only submit this quiz once.
           </Text>
         </Box>
-        <Box display={!isCommited ? "none" : ""}>
+        <Box display={!isSubmissionCommitted ? "none" : ""}>
           <Text mb={5}>
             You've already submitted a response to this exam. You can still see your responses, but you won't be able to edit them.
           </Text>
@@ -160,14 +160,14 @@ export const Quiz = ({
             options={item.options}
             answers={answers}
             setAnswers={setAnswers}
-            isCommited={isCommited}
+            isCommited={isSubmissionCommitted}
           />
         ))}
         <HStack spacing={5}>
           <Button
             colorScheme="green"
             type="submit"
-            display={isCommited ? "none" : ""}
+            display={isSubmissionCommitted ? "none" : ""}
           >
             Submit
           </Button>
@@ -179,7 +179,7 @@ export const Quiz = ({
           />
           <Button
             onClick={handleClickOnSave}
-            display={isCommited ? "none" : ""}
+            display={isSubmissionCommitted ? "none" : ""}
           >
             Save
           </Button>

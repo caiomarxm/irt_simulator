@@ -15,17 +15,21 @@ import { SubmissionService } from "../client/services/submissionService";
 import { IAnswer } from "../client/models/answer";
 
 export const ExamPage = () => {
-  const { data, isLoading, isOpenForSubmission, currentYear } = useCurrentExam();
+  const { data, isLoading, isOpenForSubmission, isExamCommitted, currentYear } =
+    useCurrentExam();
+
 
   const { data: formData, isLoading: formIsLoading } = useQuery({
-    queryKey: ['submissions'],
-    queryFn: () => SubmissionService.listSubmissions(currentYear, true)
+    queryKey: ["submissions"],
+    queryFn: () => SubmissionService.listSubmissions(currentYear, true),
   });
 
-  const axiosData = formData?.data ?? []
+  const axiosData = formData?.data ?? [];
 
-  const isCommited = axiosData?.length>0? axiosData[0].is_commited : false
-  const answers = axiosData?.length>0? axiosData[0].answers : []
+  const isSubmissionCommitted =
+    axiosData?.length > 0 ? axiosData[0].is_commited : false;
+  const answers = axiosData?.length > 0 ? axiosData[0].answers : [];
+
 
   if (isLoading || formIsLoading) {
     return (
@@ -52,7 +56,7 @@ export const ExamPage = () => {
         <TabPanels>
           <TabPanel>
             <Text mb={5}>Some informational data about the quiz here</Text>
-            {isOpenForSubmission ? (
+            {isOpenForSubmission && !isExamCommitted ? (
               <Text>Looks like the quiz is open for submission!</Text>
             ) : (
               <></>
@@ -64,7 +68,7 @@ export const ExamPage = () => {
               isOpenForSubmition={isOpenForSubmission}
               questions={data?.questions}
               currentYear={currentYear}
-              isCommited={isCommited}
+              isSubmissionCommitted={isSubmissionCommitted}
               initialAnswers={answers as IAnswer[]}
             />
           </TabPanel>
