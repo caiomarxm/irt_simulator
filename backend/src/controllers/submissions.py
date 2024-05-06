@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from fastapi import HTTPException, Response
+from fastapi import HTTPException, Response, status
 from fastapi.routing import APIRouter
 from sqlmodel import select
 from typing import List, Optional
@@ -16,6 +16,7 @@ from models.submissions import (
     Submission
 )
 from models.exams import Exam
+from models.answers import Answer
 
 
 router = APIRouter()
@@ -43,12 +44,13 @@ def get_all_submissions(
     return submissions
 
 
-@router.post('/create', response_model=SubmissionOut, status_code=201)
-def create_submission(
+@router.post('/submit', response_model=SubmissionOut, status_code=200)
+def create_or_update_submission(
     *,
     submission_in: SubmissionIn,
     session: InjectSession,
-    user: InjectCurrentUser
+    user: InjectCurrentUser,
+    response: Response
 ) -> SubmissionOut:
     exam = session.exec(select(Exam).where(
         Exam.year == submission_in.exam_year)).first()
@@ -59,12 +61,48 @@ def create_submission(
             detail=f"Trying to submit for invalid or closed exam."
         )
 
-    submission = create_submission_(
-        submission_in=submission_in,
-        answers=submission_in.answers,
-        user=user,
-        exam=exam,
+    # Check if there's any submission. If so, overwrites
+    # is_superuser set to false because each individual can only has one active submission
+    db_submissions: List[Submission] = read_all_submissions(
+        user_id=user.id,
+        is_superuser=False,
+        year=submission_in.exam_year,
         session=session
     )
 
-    return submission
+    if not db_submissions:
+        submission = create_submission_(
+            submission_in=submission_in,
+            answers=submission_in.answers,
+            user=user,
+            exam=exam,
+            session=session
+        )
+        response.status_code = status.HTTP_201_CREATED
+        return submission
+
+    # Overwriting logic, this could be extracted to other function
+    assert len(db_submissions) <= 1
+    db_submission = db_submissions[0]
+
+    for answer in submission_in.answers:
+        db_answer: Answer = db_submission.find_answer_index_by_question_id(
+            answer.question_id)
+
+        if not db_answer:
+            session.add(
+                Answer(
+                    question_id=answer.question_id,
+                    response_index=answer.response_index,
+                    submission=db_submission
+                )
+            )
+
+        elif db_answer.response_index != answer.response_index:
+            db_answer.response_index = answer.response_index
+            session.add(db_answer)
+    
+    session.commit()
+    session.refresh(db_submission)
+
+    return db_submission
