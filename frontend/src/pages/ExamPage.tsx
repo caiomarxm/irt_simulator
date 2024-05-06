@@ -13,7 +13,7 @@ import { useEffect } from "react";
 import { useCurrentExam } from "../hooks/useCurrentExam";
 
 export const ExamPage = () => {
-  const { data, isLoading, isOpenForSubmission } = useCurrentExam();
+  const { data, isLoading, isOpenForSubmission, currentYear } = useCurrentExam();
 
   // TODO: useEffect to see if the quizz is currently available to submissions
   useEffect(() => {}, []);
@@ -42,7 +42,7 @@ export const ExamPage = () => {
 
         <TabPanels>
           <TabPanel>
-            <Text>Some informational data about the quiz here</Text>
+            <Text mb={5}>Some informational data about the quiz here</Text>
             {isOpenForSubmission ? (
               <Text>Looks like the quiz is open for submission!</Text>
             ) : (
@@ -54,6 +54,7 @@ export const ExamPage = () => {
             <Quiz
               isOpenForSubmition={isOpenForSubmission}
               questions={data?.questions}
+              currentYear={currentYear}
             />
           </TabPanel>
         </TabPanels>
