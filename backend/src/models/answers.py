@@ -2,7 +2,7 @@ from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional
 
 from models.questions import Question
-from models.submissions import Submission
+from models.submissions.submissions import Submission
 
 
 class Answer(SQLModel, table=True):
@@ -13,3 +13,4 @@ class Answer(SQLModel, table=True):
     question: Question = Relationship(back_populates="answers")
 
     submission_id: int = Field(foreign_key="submission.id")
+    submission: Submission = Relationship(back_populates="answers")
