@@ -3,7 +3,7 @@ import { httpClient } from "../core/httpClient";
 import { ISubmission, ISubmissionPost } from "../models/submission";
 
 export class SubmissionService {
-  public static listSubmissions(year: number|null = null, includeAnswers: boolean = false) : AxiosPromise<ISubmission> {
+  public static listSubmissions(year: number|null = null, includeAnswers: boolean = false) : AxiosPromise<ISubmission[]> {
     let filters: string = `include_answers=${includeAnswers}`
 
     if (year) {
