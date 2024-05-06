@@ -15,29 +15,33 @@ export type QuestionProps = {
   options: string[];
   answers: IAnswer[];
   setAnswers: Dispatch<SetStateAction<IAnswer[]>>;
+  isCommited: boolean | undefined
 };
 
 export const Question = ({
   index,
   question,
-  questionId: question_id,
+  questionId,
   options,
   answers,
   setAnswers,
+  isCommited,
 }: QuestionProps) => {
-  const [value, setValue] = useState<string>("");
+  const initialAnswer = answers.filter(answer => answer.question_id == questionId) ?? []
+  const initialValue = initialAnswer.length > 0 ? `${initialAnswer[0].response_index}` : ""
+  const [value, setValue] = useState<string>(initialValue);
 
   const handleChange = (value: string) => {
     setValue(value);
-    const entry = { question_id: question_id, response_index: parseInt(value) };
-    const newAnswers = answers.filter((answer) => answer.question_id != question_id);
+    const entry = { question_id: questionId, response_index: parseInt(value) };
+    const newAnswers = answers.filter((answer) => answer.question_id != questionId);
     newAnswers.push(entry as IAnswer);
     setAnswers(newAnswers);
   };
 
   const optionsList = options.map((option, i) => {
     return (
-      <Radio key={i} value={`${i}`}>
+      <Radio key={i} value={`${i}`} isDisabled={isCommited}>
         {option}
       </Radio>
     );
