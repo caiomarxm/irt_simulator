@@ -9,16 +9,23 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Quiz } from "../components/quiz/Quiz";
-import { useEffect } from "react";
 import { useCurrentExam } from "../hooks/useCurrentExam";
+import { useQuery } from "@tanstack/react-query";
+import { SubmissionService } from "../client/services/submissionService";
+import { IAnswer } from "../client/models/answer";
 
 export const ExamPage = () => {
   const { data, isLoading, isOpenForSubmission, currentYear } = useCurrentExam();
 
-  // TODO: useEffect to see if the quizz is currently available to submissions
-  useEffect(() => {}, []);
+  const { data: formData, isLoading: formIsLoading } = useQuery({
+    queryKey: ['submissions'],
+    queryFn: () => SubmissionService.listSubmissions(currentYear, true)
+  });
 
-  if (isLoading) {
+  const isCommited = formData?.data[0].is_commited
+  const answers = formData?.data[0].answers
+
+  if (isLoading || formIsLoading) {
     return (
       <Flex justifyContent="center" alignItems="center">
         <Spinner
@@ -55,6 +62,8 @@ export const ExamPage = () => {
               isOpenForSubmition={isOpenForSubmission}
               questions={data?.questions}
               currentYear={currentYear}
+              isCommited={isCommited}
+              initialAnswers={answers as IAnswer[]}
             />
           </TabPanel>
         </TabPanels>
