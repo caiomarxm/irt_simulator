@@ -7,7 +7,7 @@ from models.exams import Exam
 
 class SubmissionBase(SQLModel):
     is_commited: bool = False
-    result: Optional[float]
+    result: Optional[float] = None
 
     user_id: int
     exam_id: int
