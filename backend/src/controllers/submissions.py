@@ -85,6 +85,14 @@ def create_or_update_submission(
     assert len(db_submissions) <= 1
     db_submission = db_submissions[0]
 
+    if db_submission.is_commited:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Trying to overwrite an already comitted submission."
+        )
+
+    db_submission.is_commited = submission_in.is_commited
+
     for answer in submission_in.answers:
         db_answer: Answer = db_submission.find_answer_index_by_question_id(
             answer.question_id)
