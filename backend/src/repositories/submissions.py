@@ -4,15 +4,42 @@ from typing import List, Optional
 
 from models.submissions import (
     SubmissionBase,
-    Submission
+    Submission,
+    SubmissionIn
 )
+from models.answers import (
+    Answer,
+    AnswerBase
+)
+from models.user import User
+from models.exams import Exam
 
 
-def create_submission(user_in: SubmissionBase, session: Session) -> Submission:
-    session.add(user_in)
+def create_submission_(
+    submission_in: SubmissionIn,
+    answers: Optional[List[AnswerBase]],
+    user: User,
+    exam: Exam,
+    session: Session
+) -> Submission:
+
+    if submission_in.answers:
+        submission_in.answers = None
+
+    submission_in_dict = submission_in.model_dump()
+    submission_in_dict.pop('answers')
+    
+    submission = Submission(**submission_in_dict, user=user, exam=exam)
+    session.add(submission)
+
+    for answer in answers:
+        answer_dict = answer.model_dump()
+        answer = Answer(**answer_dict, submission=submission)
+        session.add(answer)
+
     session.commit()
-    session.refresh(user_in)
-    return user_in
+    session.refresh(submission)
+    return submission
 
 
 def update_submission(updated_submission: SubmissionBase, session: Session, submission: Submission) -> Submission:
