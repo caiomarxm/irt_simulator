@@ -6,14 +6,15 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Dispatch, SetStateAction, useState } from "react";
+import { IAnswer } from "../../client/models/answer";
 
 export type QuestionProps = {
   index: number;
   questionId: number;
   question: string;
   options: string[];
-  answers: Record<string, any>[];
-  setAnswers: Dispatch<SetStateAction<Record<string, any>[]>>;
+  answers: IAnswer[];
+  setAnswers: Dispatch<SetStateAction<IAnswer[]>>;
 };
 
 export const Question = ({
@@ -30,7 +31,7 @@ export const Question = ({
     setValue(value);
     const entry = { question_id: question_id, response_index: parseInt(value) };
     const newAnswers = answers.filter((answer) => answer.question_id != question_id);
-    newAnswers.push(entry);
+    newAnswers.push(entry as IAnswer);
     setAnswers(newAnswers);
   };
 
