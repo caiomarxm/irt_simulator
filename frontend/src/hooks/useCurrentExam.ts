@@ -20,6 +20,7 @@ export const useCurrentExam = () => {
     ...query,
     data: query.data?.data,
     setCurrentYear,
-    isOpenForSubmission
+    isOpenForSubmission,
+    currentYear
   };
 };
