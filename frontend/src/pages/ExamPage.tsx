@@ -22,8 +22,10 @@ export const ExamPage = () => {
     queryFn: () => SubmissionService.listSubmissions(currentYear, true)
   });
 
-  const isCommited = formData?.data[0].is_commited
-  const answers = formData?.data[0].answers
+  const axiosData = formData?.data ?? []
+
+  const isCommited = axiosData?.length>0? axiosData[0].is_commited : false
+  const answers = axiosData?.length>0? axiosData[0].answers : []
 
   if (isLoading || formIsLoading) {
     return (

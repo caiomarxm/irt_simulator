@@ -27,7 +27,7 @@ export const Question = ({
   setAnswers,
   isCommited,
 }: QuestionProps) => {
-  const initialAnswer = answers.filter(answer => answer.question_id == questionId) ?? []
+  const initialAnswer = answers.length>0 ? answers.filter(answer => answer.question_id == questionId) : []
   const initialValue = initialAnswer.length > 0 ? `${initialAnswer[0].response_index}` : ""
   const [value, setValue] = useState<string>(initialValue);
 

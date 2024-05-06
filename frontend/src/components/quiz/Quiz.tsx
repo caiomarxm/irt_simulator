@@ -14,7 +14,6 @@ import {
   FormEvent,
   FormEventHandler,
   MouseEventHandler,
-  useEffect,
   useState,
 } from "react";
 import { IAnswer } from "../../client/models/answer";
@@ -47,9 +46,6 @@ export const Quiz = ({
 
   // Hooks
   const { errorToast, unknownErrorToast, successToast } = useCustomToast();
-
-  // Use Effect to render previous answers and if submit was commited!!!
-  useEffect(() => {}, []);
 
   // Submit and Save handlers
   const saveAnswers = async (submission: ISubmissionPostData) => {
