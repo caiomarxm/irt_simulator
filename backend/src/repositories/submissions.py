@@ -58,10 +58,10 @@ def read_submission_by_id(submission_id: int, session: Session) -> Submission | 
 
 
 def read_all_submissions(*, user_id: int, is_superuser: bool, year: Optional[int] = None, session: Session) -> List[Submission]:
-    query = select(Submission)
+    query = select(Submission).join(Exam)
 
     if year:
-        query = query.where(Submission.year == year)
+        query = query.where(Exam.year == year)
     if not is_superuser:
         query = query.where(Submission.user_id == user_id)
 
