@@ -32,7 +32,7 @@ export const Quiz = ({ isOpenForSubmition, questions }: QuizProps) => {
         <Heading as="h2" fontSize="1.5em" mb={5}>
           You are here too early!
         </Heading>
-        <Text>Looks like the quizz isn't available for submissions yet</Text>
+        <Text>Looks like the quiz isn't available for submissions yet</Text>
       </Box>
     )
   }
@@ -41,10 +41,10 @@ export const Quiz = ({ isOpenForSubmition, questions }: QuizProps) => {
     <Box>
       <Form method="POST" onSubmit={handleSubmit}>
         <Heading as="h2" fontSize="1.5em" mb={5}>
-          Heres the quizz!
+          Here's the quiz!
         </Heading>
         <Text mb={5}>
-          Please keep in mind that you can only submit this quizz once.
+          Please keep in mind that you can only submit this quiz once.
         </Text>
         <Divider mb={5} />
         {questions?.map((item, i) => (

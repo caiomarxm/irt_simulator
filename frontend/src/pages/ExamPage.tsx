@@ -37,14 +37,14 @@ export const ExamPage = () => {
       <Tabs>
         <TabList>
           <Tab>Current Exam</Tab>
-          <Tab>Take the Quizz!</Tab>
+          <Tab>Take the Quiz!</Tab>
         </TabList>
 
         <TabPanels>
           <TabPanel>
-            <Text>Some informational data about the quizz here</Text>
+            <Text>Some informational data about the quiz here</Text>
             {isOpenForSubmission ? (
-              <Text>Looks like the quizz is open for submission!</Text>
+              <Text>Looks like the quiz is open for submission!</Text>
             ) : (
               <></>
             )}
