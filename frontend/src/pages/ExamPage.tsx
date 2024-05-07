@@ -10,26 +10,15 @@ import {
 } from "@chakra-ui/react";
 import { Quiz } from "../components/quiz/Quiz";
 import { useCurrentExam } from "../hooks/useCurrentExam";
-import { useQuery } from "@tanstack/react-query";
-import { SubmissionService } from "../client/services/submissionService";
-import { IAnswer } from "../client/models/answer";
+import { QuizContextProvider } from "../context/QuizContextProvider";
+import { useSubmission } from "../hooks/useSubmission";
 
 export const ExamPage = () => {
-  const { data, isLoading, isOpenForSubmission, isExamCommitted, currentYear } =
-    useCurrentExam();
+  const { isLoading, data } = useCurrentExam();
 
+  const isOpenForSubmission = !data?.is_closed
 
-  const { data: formData, isLoading: formIsLoading } = useQuery({
-    queryKey: ["submissions"],
-    queryFn: () => SubmissionService.listSubmissions(currentYear, true),
-  });
-
-  const axiosData = formData?.data ?? [];
-
-  const isSubmissionCommitted =
-    axiosData?.length > 0 ? axiosData[0].is_commited : false;
-  const answers = axiosData?.length > 0 ? axiosData[0].answers : [];
-
+  const { isLoading: formIsLoading } = useSubmission();
 
   if (isLoading || formIsLoading) {
     return (
@@ -56,7 +45,7 @@ export const ExamPage = () => {
         <TabPanels>
           <TabPanel>
             <Text mb={5}>Some informational data about the quiz here</Text>
-            {isOpenForSubmission && !isExamCommitted ? (
+            {isOpenForSubmission && !data?.is_committed ? (
               <Text>Looks like the quiz is open for submission!</Text>
             ) : (
               <></>
@@ -64,13 +53,9 @@ export const ExamPage = () => {
           </TabPanel>
 
           <TabPanel>
-            <Quiz
-              isOpenForSubmition={isOpenForSubmission}
-              questions={data?.questions}
-              currentYear={currentYear}
-              isSubmissionCommitted={isSubmissionCommitted}
-              initialAnswers={answers as IAnswer[]}
-            />
+            <QuizContextProvider>
+              <Quiz />
+            </QuizContextProvider>
           </TabPanel>
         </TabPanels>
       </Tabs>
