@@ -16,9 +16,20 @@ import { useSubmission } from "../hooks/useSubmission";
 export const ExamPage = () => {
   const { isLoading, data } = useCurrentExam();
 
-  const isOpenForSubmission = !data?.is_closed
+  const isOpenForSubmission = !data?.is_closed;
 
-  const { isLoading: formIsLoading } = useSubmission();
+  const { isLoading: formIsLoading, data: formData } = useSubmission();
+
+  let text: string = "";
+
+  if (isOpenForSubmission && !data?.is_committed) {
+    if (!formData?.is_commited) {
+      text = "Looks like the quiz is open for submission!";
+    } else {
+      text =
+        "Looks like you already took the quiz. The results will be available soon.";
+    }
+  }
 
   if (isLoading || formIsLoading) {
     return (
@@ -45,11 +56,7 @@ export const ExamPage = () => {
         <TabPanels>
           <TabPanel>
             <Text mb={5}>Some informational data about the quiz here</Text>
-            {isOpenForSubmission && !data?.is_committed ? (
-              <Text>Looks like the quiz is open for submission!</Text>
-            ) : (
-              <></>
-            )}
+            <Text>{text}</Text>
           </TabPanel>
 
           <TabPanel>
