@@ -15,8 +15,9 @@ export const useSubmission = () => {
 
   const submissionMutation = useMutation({
     mutationFn: async (submission: ISubmissionPost) => {
-      await SubmissionService.submitExam(submission);
+      const result = await SubmissionService.submitExam(submission);
       queryClient.invalidateQueries({queryKey: ["submissions"]});
+      return result
     },
   });
 
