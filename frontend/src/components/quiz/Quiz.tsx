@@ -1,19 +1,19 @@
 import {
   Box,
   Button,
-  Divider,
   HStack,
   Heading,
+  Spinner,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { Form } from "react-router-dom";
-import { Question } from "./Question";
-import { IQuestion } from "../../client/models/question";
 import {
   FormEvent,
   FormEventHandler,
   MouseEventHandler,
+  useContext,
+  useEffect,
   useState,
 } from "react";
 import { IAnswer } from "../../client/models/answer";
@@ -24,24 +24,26 @@ import ConfirmationModal from "./ConfirmationModal";
 import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 import { AxiosError } from "axios";
 import useCustomToast from "../../hooks/useCustomToast";
+import { QuizContext } from "../../context/QuizContextProvider";
+import { QuizHeading } from "./QuizHeading";
+import { QuestionsRenderer } from "./QuestionsRenderer";
 
-type QuizProps = {
-  isOpenForSubmition: boolean;
-  questions?: IQuestion[];
-  currentYear: number;
-  isSubmissionCommitted: boolean | undefined;
-  initialAnswers: IAnswer[];
-};
+export const Quiz = () => {
+  const context = useContext(QuizContext);
 
-export const Quiz = ({
-  isOpenForSubmition,
-  questions,
-  currentYear,
-  isSubmissionCommitted,
-  initialAnswers,
-}: QuizProps) => {
   // States used by the Quizz
-  const [answers, setAnswers] = useState(initialAnswers as IAnswer[]);
+  const [answers, setAnswers] = useState([] as IAnswer[]);
+
+  useEffect(() => {
+    if (!context?.submission.isLoading) {
+      setAnswers(context?.submission.data?.answers ?? [] as IAnswer[]);
+    }
+  }, [
+    context?.exam.isLoading,
+    context?.submission.isLoading,
+    context?.submission.data?.answers,
+  ]);
+
   const { isOpen, onOpen: openConfirmationModal, onClose } = useDisclosure();
 
   // Hooks
@@ -61,7 +63,7 @@ export const Quiz = ({
     }
 
     return {
-      exam_year: currentYear,
+      exam_year: context?.exam.currentYear,
       user_id: userData?.id,
       is_commited: isCommited,
       answers: answers,
@@ -123,7 +125,11 @@ export const Quiz = ({
   };
 
   // Building the component
-  if (!isOpenForSubmition) {
+  if (context?.exam.isLoading || context?.submission.isLoading) {
+    return <Spinner />;
+  }
+
+  if (!context?.exam.isOpenForSubmission) {
     return (
       <Box>
         <Heading as="h2" fontSize="1.5em" mb={5}>
@@ -137,37 +143,18 @@ export const Quiz = ({
   return (
     <Box>
       <Form method="POST" onSubmit={handleClickOnSubmit}>
-        <Heading as="h2" fontSize="1.5em" mb={5}>
-          Here's the quiz!
-        </Heading>
-        <Box display={isSubmissionCommitted ? "none" : ""}>
-          <Text mb={5}>
-            Please keep in mind that you can only submit this quiz once.
-          </Text>
-        </Box>
-        <Box display={!isSubmissionCommitted ? "none" : ""}>
-          <Text mb={5}>
-            You've already submitted a response to this exam. You can still see your responses, but you won't be able to edit them.
-          </Text>
-        </Box>
-        <Divider mb={5} />
-        {questions?.map((item, i) => (
-          <Question
-            key={item.id}
-            index={i + 1}
-            questionId={item.id}
-            question={item.question}
-            options={item.options}
-            answers={answers}
-            setAnswers={setAnswers}
-            isCommited={isSubmissionCommitted}
-          />
-        ))}
+        <QuizHeading />
+        <QuestionsRenderer
+          questions={context.exam.data.questions}
+          answers={answers}
+          setAnswers={setAnswers}
+          isCommitted={context.submission.isSubmissionCommitted}
+        />
         <HStack spacing={5}>
           <Button
             colorScheme="green"
             type="submit"
-            display={isSubmissionCommitted ? "none" : ""}
+            display={context.submission.isSubmissionCommitted ? "none" : ""}
           >
             Submit
           </Button>
@@ -179,7 +166,7 @@ export const Quiz = ({
           />
           <Button
             onClick={handleClickOnSave}
-            display={isSubmissionCommitted ? "none" : ""}
+            display={context.submission.isSubmissionCommitted ? "none" : ""}
           >
             Save
           </Button>
