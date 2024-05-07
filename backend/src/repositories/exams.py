@@ -16,16 +16,16 @@ def create_exam(exam: ExamCreate, session: Session) -> Exam:
     return exam_in
 
 
-def get_all_exams(session: Session):
+def read_all_exams(session: Session):
     return session.exec(select(Exam)).all()
 
 
-def get_exam_by_id(id: int, session: Session) -> Exam:
-    exam = session.get(Exam, id)
+def read_exam_by_id(exam_id: int, session: Session) -> Exam:
+    exam = session.get(Exam, exam_id)
     return exam
 
 
-def get_exam_by_year(year: int, session: Session) -> Exam:
+def read_exam_by_year(year: int, session: Session) -> Exam:
     exam = session.exec(select(Exam).where(Exam.year == year)).first()
     return exam
 
@@ -35,6 +35,14 @@ def update_exam(updated_exam: ExamUpdate, session: Session, exam: Exam) -> Exam:
 
     exam.sqlmodel_update(exam_data)
 
+    session.add(exam)
+    session.commit()
+    session.refresh(exam)
+    return exam
+
+
+def commit_exam(exam: Exam, session: Session) -> Exam:
+    exam.is_committed = True
     session.add(exam)
     session.commit()
     session.refresh(exam)
