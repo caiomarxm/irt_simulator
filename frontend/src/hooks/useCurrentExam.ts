@@ -12,15 +12,10 @@ export const useCurrentExam = () => {
     queryFn: async () => await ExamService.listExams(currentYear, true),
   });
 
-  const [isOpenForSubmission] = useState<boolean>(
-    !(query.data?.data.is_closed)
-  )
-
   return {
     ...query,
     data: query.data?.data,
     setCurrentYear,
-    isOpenForSubmission,
     currentYear
   };
 };
