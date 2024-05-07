@@ -5,7 +5,7 @@ import {
   RadioGroup,
   VStack,
 } from "@chakra-ui/react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IAnswer } from "../../client/models/answer";
 
 export type QuestionProps = {
@@ -15,7 +15,8 @@ export type QuestionProps = {
   options: string[];
   answers: IAnswer[];
   setAnswers: Dispatch<SetStateAction<IAnswer[]>>;
-  isCommited: boolean | undefined
+  isCommitted: boolean | undefined;
+  correctResponseIndex: number | undefined;
 };
 
 export const Question = ({
@@ -25,16 +26,28 @@ export const Question = ({
   options,
   answers,
   setAnswers,
-  isCommited,
+  isCommitted: isCommited,
 }: QuestionProps) => {
-  const initialAnswer = answers.length>0 ? answers.filter(answer => answer.question_id == questionId) : []
-  const initialValue = initialAnswer.length > 0 ? `${initialAnswer[0].response_index}` : ""
+  const initialAnswer =
+    answers.length > 0
+      ? answers.filter((answer) => answer.question_id == questionId)
+      : [];
+
+  const initialValue =
+    initialAnswer.length > 0 ? `${initialAnswer[0].response_index}` : "";
+
   const [value, setValue] = useState<string>(initialValue);
+
+  useEffect(() => {
+    setValue(initialValue)
+  }, [setValue, initialValue])
 
   const handleChange = (value: string) => {
     setValue(value);
     const entry = { question_id: questionId, response_index: parseInt(value) };
-    const newAnswers = answers.filter((answer) => answer.question_id != questionId);
+    const newAnswers = answers.filter(
+      (answer) => answer.question_id != questionId
+    );
     newAnswers.push(entry as IAnswer);
     setAnswers(newAnswers);
   };
