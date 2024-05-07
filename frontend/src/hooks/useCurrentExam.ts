@@ -16,16 +16,11 @@ export const useCurrentExam = () => {
     !(query.data?.data.is_closed)
   )
 
-  const [isExamCommitted] = useState<boolean>(
-    query.data?.data.is_committed
-  )
-
   return {
     ...query,
     data: query.data?.data,
     setCurrentYear,
     isOpenForSubmission,
-    isExamCommitted,
     currentYear
   };
 };
