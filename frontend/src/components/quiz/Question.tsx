@@ -16,7 +16,6 @@ export type QuestionProps = {
   answers: IAnswer[];
   setAnswers: Dispatch<SetStateAction<IAnswer[]>>;
   isCommitted: boolean | undefined;
-  correctResponseIndex: number | undefined;
 };
 
 export const Question = ({
