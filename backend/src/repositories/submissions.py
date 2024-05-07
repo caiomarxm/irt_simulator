@@ -15,7 +15,7 @@ from models.user import User
 from models.exams import Exam
 
 
-def create_submission_(
+def create_submission(
     submission_in: SubmissionIn,
     answers: Optional[List[AnswerBase]],
     user: User,
@@ -50,6 +50,13 @@ def update_submission(updated_submission: SubmissionBase, session: Session, subm
     session.commit()
     session.refresh(submission)
     return submission
+
+
+def update_multiple_submissions(updated_submission_list: List[Submission], session: Session) -> List[Submission]:
+    session.add_all(updated_submission_list)
+    session.commit()
+    [session.refresh(submission) for submission in updated_submission_list]
+    return updated_submission_list
 
 
 def read_submission_by_id(submission_id: int, session: Session) -> Submission | None:
