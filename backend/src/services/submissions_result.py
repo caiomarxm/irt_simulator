@@ -7,7 +7,7 @@ import numpy.array_api
 from models import Submission, Answer
 
 
-class SubmissionsService:
+class SubmissionsResultService:
     granularity = 500
 
     @staticmethod
@@ -18,21 +18,21 @@ class SubmissionsService:
             raise ValueError(
                 f"answers expected to be List[Answer], instead it was {type(answers)}")
 
-        grades_probability = SubmissionsService._calculate_grades_probability(answers=answers)
+        grades_probability = SubmissionsResultService._calculate_grades_probability(answers=answers)
         index_max = grades_probability.index(max(grades_probability))
-        final_grade = SubmissionsService._get_normalized_domain()[index_max]
+        final_grade = SubmissionsResultService._get_normalized_domain()[index_max]
 
         return final_grade
 
 
     @staticmethod
     def _calculate_grades_probability(answers: List[Answer]):
-        probability_matrix = SubmissionsService._get_answers_probability_matrix(
+        probability_matrix = SubmissionsResultService._get_answers_probability_matrix(
             answers=answers)
         
         grades_probability = []
 
-        for i in range(SubmissionsService.granularity):
+        for i in range(SubmissionsResultService.granularity):
             product = 1
             for j, probability_vector in enumerate(probability_matrix):
                 multiplier = (probability_vector[i] if answers[j].response_index ==
@@ -48,7 +48,7 @@ class SubmissionsService:
     @staticmethod
     def _get_answers_probability_matrix(answers: List[Answer]):
         probability_matrix = [
-            SubmissionsService._get_answer_probability_vector(
+            SubmissionsResultService._get_answer_probability_vector(
                 answer=answer) for answer in answers
         ]
         return probability_matrix
@@ -63,7 +63,7 @@ class SubmissionsService:
         def calculate_probability(ability):
             return guess_factor + ((1-guess_factor)/(1+math.exp(-discrimination*(ability-difficulty))))
 
-        domain = SubmissionsService._get_domain()
+        domain = SubmissionsResultService._get_domain()
         probability_vector = numpy.vectorize(calculate_probability)(domain)
 
         return probability_vector
@@ -73,7 +73,7 @@ class SubmissionsService:
     def _get_domain():
         start = -10
         stop = 10
-        step = (stop - start) / SubmissionsService.granularity
+        step = (stop - start) / SubmissionsResultService.granularity
         return numpy.arange(start, stop, step)
 
 
@@ -81,6 +81,6 @@ class SubmissionsService:
     def _get_normalized_domain():
         start = 0
         stop = 1000
-        step = (stop - start) / SubmissionsService.granularity
+        step = (stop - start) / SubmissionsResultService.granularity
         return numpy.arange(start, stop, step)
 
