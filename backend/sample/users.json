@@ -1,0 +1,52 @@
+[
+    {
+        "email": "user1@example.com",
+        "full_name": "John Doe",
+        "hashed_password": "hashedpassword1"
+    },
+    {
+        "email": "user2@example.com",
+        "full_name": "Jane Smith",
+        "hashed_password": "hashedpassword2"
+    },
+    {
+        "email": "user3@example.com",
+        "full_name": "Alice Johnson",
+        "hashed_password": "hashedpassword3"
+    },
+    {
+        "email": "user4@example.com",
+        "full_name": "Bob Brown",
+        "hashed_password": "hashedpassword4"
+    },
+    {
+        "email": "user5@example.com",
+        "full_name": "Emily Davis",
+        "hashed_password": "hashedpassword5"
+    },
+    {
+        "email": "user6@example.com",
+        "full_name": "Michael Wilson",
+        "hashed_password": "hashedpassword6"
+    },
+    {
+        "email": "user7@example.com",
+        "full_name": "Sarah Martinez",
+        "hashed_password": "hashedpassword7"
+    },
+    {
+        "email": "user8@example.com",
+        "full_name": "David Taylor",
+        "hashed_password": "hashedpassword8"
+    },
+    {
+        "email": "user9@example.com",
+        "full_name": "Laura Anderson",
+        "hashed_password": "hashedpassword9"
+    },
+    {
+        "email": "user10@example.com",
+        "full_name": "Chris Wilson",
+        "hashed_password": "hashedpassword10"
+    }
+]
