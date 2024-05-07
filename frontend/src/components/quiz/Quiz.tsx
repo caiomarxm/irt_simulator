@@ -134,13 +134,28 @@ export const Quiz = () => {
     return <Spinner />;
   }
 
-  if (!context?.exam.isOpenForSubmission) {
+  if (!context?.exam.isOpenForSubmission && !context?.exam.isExamCommitted) {
     return (
       <Box>
         <Heading as="h2" fontSize="1.5em" mb={5}>
           You are here too early!
         </Heading>
         <Text>Looks like the quiz isn't available for submissions yet</Text>
+      </Box>
+    );
+  }
+  else if (context?.exam.isExamCommitted) {
+    return (
+      <Box>
+        <Heading as="h2" fontSize="1.5em" mb={5}>
+          Looks like the quiz is closed, but you can still see your submission bellow!
+        </Heading>
+        <QuestionsRenderer
+          questions={context.exam.data.questions}
+          answers={answers}
+          setAnswers={setAnswers}
+          isCommitted={true}
+        />
       </Box>
     );
   }
