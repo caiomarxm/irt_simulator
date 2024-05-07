@@ -17,7 +17,7 @@ export const Navbar = () => {
   }, []);
 
   return (
-    <Flex as="nav" p="10px" mb="60px" alignItems="center">
+    <Flex as="nav" p="10px" mb="30px" alignItems="center">
       <Heading as="h1" fontSize="1.5em">
         Welcome, {user?.full_name?.split(" ")[0]}
       </Heading>
