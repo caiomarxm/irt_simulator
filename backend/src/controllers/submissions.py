@@ -5,10 +5,7 @@ from sqlmodel import select
 from typing import List, Optional
 
 from core.deps import InjectCurrentUser, InjectSession
-from repositories.submissions import (
-    read_all_submissions,
-    create_submission_
-)
+from repositories import submissions as submissions_repo
 from models.submissions import (
     SubmissionBase,
     SubmissionOut,
@@ -32,7 +29,7 @@ def get_all_submissions(
     user: InjectCurrentUser
 ) -> List[SubmissionOut | SubmissionBase]:
 
-    submissions = read_all_submissions(
+    submissions = submissions_repo.read_all_submissions(
         year=year,
         session=session,
         user_id=user.id,
@@ -64,7 +61,7 @@ def create_or_update_submission(
 
     # Check if there's any submission. If so, overwrites
     # is_superuser set to false because each individual can only has one active submission
-    db_submissions: List[Submission] = read_all_submissions(
+    db_submissions: List[Submission] = submissions_repo.read_all_submissions(
         user_id=user.id,
         is_superuser=False,
         year=submission_in.exam_year,
@@ -72,7 +69,7 @@ def create_or_update_submission(
     )
 
     if not db_submissions:
-        submission = create_submission_(
+        submission = submissions_repo.create_submission(
             submission_in=submission_in,
             answers=submission_in.answers,
             user=user,
@@ -94,6 +91,7 @@ def create_or_update_submission(
 
     db_submission.is_commited = submission_in.is_commited
 
+    # TODO: Refactor this loop to extract db logic
     for answer in submission_in.answers:
         db_answer: Answer = db_submission.find_answer_index_by_question_id(
             answer.question_id)
@@ -110,22 +108,8 @@ def create_or_update_submission(
         elif db_answer.response_index != answer.response_index:
             db_answer.response_index = answer.response_index
             session.add(db_answer)
-    
+
     session.commit()
     session.refresh(db_submission)
 
     return db_submission
-
-
-def calculate_all_submissions_results(
-        *,
-        exam_year: int,
-        user: InjectCurrentUser,
-        session: InjectSession
-    ):
-    submissions = read_all_submissions(
-        year= exam_year,
-        user_id=user.id,
-        is_superuser=user.is_superuser,
-        session=session
-    )
