@@ -28,6 +28,7 @@ def get_all_submissions(
     session: InjectSession,
     year: Optional[int] = None,
     include_answers: Optional[bool] = False,
+    ignore_superuser: bool = False,
     user: InjectCurrentUser
 ) -> List[SubmissionOut | SubmissionBase]:
 
@@ -35,7 +36,7 @@ def get_all_submissions(
         year=year,
         session=session,
         user_id=user.id,
-        is_superuser=user.is_superuser
+        is_superuser=False if ignore_superuser else user.is_superuser
     )
 
     if include_answers:
@@ -114,3 +115,17 @@ def create_or_update_submission(
     session.refresh(db_submission)
 
     return db_submission
+
+
+def calculate_all_submissions_results(
+        *,
+        exam_year: int,
+        user: InjectCurrentUser,
+        session: InjectSession
+    ):
+    submissions = read_all_submissions(
+        year= exam_year,
+        user_id=user.id,
+        is_superuser=user.is_superuser,
+        session=session
+    )
