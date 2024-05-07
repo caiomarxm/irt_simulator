@@ -8,3 +8,4 @@ jose==1.0.0
 python-jose==3.3.0
 python-multipart==0.0.9
 pytest==8.2.0
+numpy==1.26.4
