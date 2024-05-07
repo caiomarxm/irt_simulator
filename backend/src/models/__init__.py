@@ -4,3 +4,4 @@ from .exams import *
 from .submissions.submissions import *
 from .questions import *
 from .answers import *
+from .submissions import *
