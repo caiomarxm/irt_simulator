@@ -16,6 +16,7 @@ export interface ICurrentExamQueryData {
 export interface ISubmissionQueryData {
   data: ISubmission;
   isLoading: boolean;
+  isSubmissionCommitted: boolean;
   refetch: () => void;
   submissionMutation: UseMutationResult<void, Error, ISubmissionPost, unknown>;
 }
@@ -52,6 +53,7 @@ export const QuizContextProvider = ({ children }: QuizContextProps) => {
     submission: {
       data: formData,
       isLoading: formIsLoading,
+      isSubmissionCommited: formData?.is_commited,
       refetch: refetch,
       submissionMutation: submissionMutation,
     },
