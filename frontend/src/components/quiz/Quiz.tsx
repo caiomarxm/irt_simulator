@@ -18,7 +18,6 @@ import {
 } from "react";
 import { IAnswer } from "../../client/models/answer";
 import { ISubmissionPost as ISubmissionPostData } from "../../client/models/submission";
-import { SubmissionService } from "../../client/services/submissionService";
 import { UserPublic } from "../../client/models/user";
 import ConfirmationModal from "./ConfirmationModal";
 import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
@@ -27,21 +26,25 @@ import useCustomToast from "../../hooks/useCustomToast";
 import { QuizContext } from "../../context/QuizContextProvider";
 import { QuizHeading } from "./QuizHeading";
 import { QuestionsRenderer } from "./QuestionsRenderer";
+import { useSubmission } from "../../hooks/useSubmission";
 
 export const Quiz = () => {
   const context = useContext(QuizContext);
 
   // States used by the Quizz
   const [answers, setAnswers] = useState([] as IAnswer[]);
+  const [isSubmissionCommitted, setIsSubmissionCommitted] = useState<boolean>(true);
 
   useEffect(() => {
     if (!context?.submission.isLoading) {
       setAnswers(context?.submission.data?.answers ?? [] as IAnswer[]);
+      setIsSubmissionCommitted(context?.submission.data?.is_commited as boolean)
     }
   }, [
     context?.exam.isLoading,
     context?.submission.isLoading,
     context?.submission.data?.answers,
+    context?.submission.data.is_commited
   ]);
 
   const { isOpen, onOpen: openConfirmationModal, onClose } = useDisclosure();
@@ -49,9 +52,11 @@ export const Quiz = () => {
   // Hooks
   const { errorToast, unknownErrorToast, successToast } = useCustomToast();
 
+  const { submissionMutation } = useSubmission()
+
   // Submit and Save handlers
   const saveAnswers = async (submission: ISubmissionPostData) => {
-    const result = await SubmissionService.submitExam(submission);
+    const result = await submissionMutation.mutateAsync(submission);
     return result;
   };
 
@@ -148,13 +153,13 @@ export const Quiz = () => {
           questions={context.exam.data.questions}
           answers={answers}
           setAnswers={setAnswers}
-          isCommitted={context.submission.isSubmissionCommitted}
+          isCommitted={isSubmissionCommitted}
         />
         <HStack spacing={5}>
           <Button
             colorScheme="green"
             type="submit"
-            display={context.submission.isSubmissionCommitted ? "none" : ""}
+            display={isSubmissionCommitted ? "none" : ""}
           >
             Submit
           </Button>
@@ -166,7 +171,7 @@ export const Quiz = () => {
           />
           <Button
             onClick={handleClickOnSave}
-            display={context.submission.isSubmissionCommitted ? "none" : ""}
+            display={isSubmissionCommitted ? "none" : ""}
           >
             Save
           </Button>
