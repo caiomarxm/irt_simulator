@@ -15,7 +15,7 @@ export type QuestionProps = {
   options: string[];
   answers: IAnswer[];
   setAnswers: Dispatch<SetStateAction<IAnswer[]>>;
-  isCommitted: boolean | undefined;
+  isSubmissionCommitted: boolean | undefined;
 };
 
 export const Question = ({
@@ -25,7 +25,7 @@ export const Question = ({
   options,
   answers,
   setAnswers,
-  isCommitted: isCommited,
+  isSubmissionCommitted,
 }: QuestionProps) => {
   const initialAnswer =
     answers.length > 0
@@ -53,7 +53,7 @@ export const Question = ({
 
   const optionsList = options.map((option, i) => {
     return (
-      <Radio key={i} value={`${i}`} isDisabled={isCommited}>
+      <Radio key={i} value={`${i}`} isDisabled={isSubmissionCommitted} >
         {option}
       </Radio>
     );

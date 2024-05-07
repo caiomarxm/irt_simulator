@@ -7,14 +7,14 @@ interface QuestionRendererProps {
   questions: IQuestion[];
   answers: IAnswer[];
   setAnswers: Dispatch<React.SetStateAction<IAnswer[]>>;
-  isCommitted: boolean | undefined;
+  isSubmissionCommitted: boolean | undefined;
 }
 
 export const QuestionsRenderer = ({
   questions,
   answers,
   setAnswers,
-  isCommitted,
+  isSubmissionCommitted,
 }: QuestionRendererProps) => {
   return (
     <>
@@ -27,7 +27,7 @@ export const QuestionsRenderer = ({
           options={item.options}
           answers={answers}
           setAnswers={setAnswers}
-          isCommitted={isCommitted}
+          isSubmissionCommitted={isSubmissionCommitted}
         />
       ))}
     </>

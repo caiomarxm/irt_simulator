@@ -154,7 +154,7 @@ export const Quiz = () => {
           questions={context.exam.data.questions}
           answers={answers}
           setAnswers={setAnswers}
-          isCommitted={true}
+          isSubmissionCommitted={true}
         />
       </Box>
     );
@@ -168,7 +168,7 @@ export const Quiz = () => {
           questions={context.exam.data.questions}
           answers={answers}
           setAnswers={setAnswers}
-          isCommitted={isSubmissionCommitted}
+          isSubmissionCommitted={isSubmissionCommitted}
         />
         <HStack spacing={5}>
           <Button
