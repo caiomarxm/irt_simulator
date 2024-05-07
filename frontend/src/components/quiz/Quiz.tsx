@@ -44,7 +44,7 @@ export const Quiz = () => {
     context?.exam.isLoading,
     context?.submission.isLoading,
     context?.submission.data?.answers,
-    context?.submission.data.is_commited
+    context?.submission.data?.is_commited
   ]);
 
   const { isOpen, onOpen: openConfirmationModal, onClose } = useDisclosure();
