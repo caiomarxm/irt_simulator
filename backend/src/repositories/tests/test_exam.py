@@ -7,7 +7,7 @@ from repositories.exams import (
     read_exam_by_id,
     read_exam_by_year,
     update_exam_by_id
-    )
+)
 
 
 def test_get_exam_by_id():
@@ -24,10 +24,12 @@ def test_get_exam_by_year():
 
 def test_update_exam():
     with Session(engine) as session:
-        exam_update = ExamUpdate(is_closed=False)
+        db_exam = read_exam_by_id(exam_id=1, session=session)
+        db_exam_was_closed = db_exam.is_closed
+        exam_update = ExamUpdate(is_closed=(not db_exam_was_closed))
         exam = update_exam_by_id(1, exam_update, session)
-        assert exam.is_closed == False
+        assert exam.is_closed != db_exam_was_closed
 
-        exam_update.is_closed = True
+        exam_update.is_closed = db_exam_was_closed
         exam = update_exam_by_id(1, exam_update, session)
-        assert exam.is_closed == True
+        assert exam.is_closed == db_exam_was_closed
