@@ -18,13 +18,6 @@ export const Sidebar = () => {
           Current Results
         </NavLink>
       </ListItem>
-
-      <ListItem>
-        <NavLink to="previous-results">
-          <ListIcon as={GenericAvatarIcon} />
-          Previous Results
-        </NavLink>
-      </ListItem>
     </List>
   );
 };
