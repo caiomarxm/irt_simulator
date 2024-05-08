@@ -8,7 +8,12 @@ from models import Submission, Answer
 
 
 class SubmissionsResultService:
-    granularity = 500
+    granularity = 200
+    normalized_domain_start = 200
+    normalized_domain_stop = 1000
+
+    guess_factor = 0.05
+    amortization = 0.25
 
     @staticmethod
     def calculate_submission_result(submission: Submission):
@@ -20,6 +25,7 @@ class SubmissionsResultService:
 
         grades_probability = SubmissionsResultService._calculate_grades_probability(answers=answers)
         index_max = grades_probability.index(max(grades_probability))
+
         final_grade = SubmissionsResultService._get_normalized_domain()[index_max]
 
         return final_grade
@@ -32,16 +38,21 @@ class SubmissionsResultService:
         
         grades_probability = []
 
-        for i in range(SubmissionsResultService.granularity):
+        for i_gran in range(SubmissionsResultService.granularity):
             product = 1
-            for j, probability_vector in enumerate(probability_matrix):
-                multiplier = (probability_vector[i] if answers[j].response_index ==
-                              answers[j].question.correct_response_index else 1-probability_vector[i])
+            for j_questions, probability_vector in enumerate(probability_matrix):
+                answer = answers[j_questions]
+                answer_index = answer.response_index
+                correct_response_index = answer.question.correct_response_index
+                is_answer_correct = answer_index == correct_response_index
+
+                current_probability = probability_vector[i_gran]
+                multiplier = (current_probability if is_answer_correct else (1-current_probability))
 
                 product = product * multiplier
 
             grades_probability.append(product) 
-        
+
         return grades_probability
 
 
@@ -56,9 +67,11 @@ class SubmissionsResultService:
 
     @staticmethod
     def _get_answer_probability_vector(answer: Answer):
-        discrimination = 1 - (1/(answer.question.difficulty+0.3))
-        difficulty =  1 - (1/(answer.question.difficulty+0.3))
-        guess_factor = 0.1
+        amortization = SubmissionsResultService.amortization
+
+        discrimination = 1 - (1/(answer.question.difficulty+amortization))
+        difficulty =  1 - (1/(answer.question.difficulty+amortization))
+        guess_factor = SubmissionsResultService.guess_factor
 
         def calculate_probability(ability):
             return guess_factor + ((1-guess_factor)/(1+math.exp(-discrimination*(ability-difficulty))))
@@ -79,8 +92,7 @@ class SubmissionsResultService:
 
     @staticmethod
     def _get_normalized_domain():
-        start = 0
-        stop = 1000
+        start = SubmissionsResultService.normalized_domain_start
+        stop = SubmissionsResultService.normalized_domain_stop
         step = (stop - start) / SubmissionsResultService.granularity
         return numpy.arange(start, stop, step)
-
