@@ -11,7 +11,7 @@ from models.exams import (
     ExamCommited,
     ExamUpdate
 )
-from services.submissions_result import SubmissionsResultService
+from services.submissions import SubmissionsService
 
 
 router = APIRouter()
@@ -103,8 +103,8 @@ def calculate_all_submissions_results(
     )
 
     for submission in submissions:
-        submission.result = SubmissionsResultService.calculate_submission_result(
-            submission=submission)
+        submission.result = SubmissionsService.calculate_result(
+            submission=submission, session=session)
 
     submissions = submissions_repo.update_multiple_submissions(
         updated_submission_list=submissions, session=session)
