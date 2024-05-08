@@ -9,7 +9,6 @@ import { Admin } from "./pages/Admin";
 import { LoginPage } from "./pages/LoginPage";
 import { AdminProtected, UserProtected } from "./guard/ProtectedRoutes";
 import { ResultsPage } from "./pages/ResultsPage";
-import { PreviousResultsPage } from "./pages/PreviousResults";
 import { ExamPage } from "./pages/ExamPage";
 import { ProfilePage } from "./pages/ProfilePage";
 
@@ -19,7 +18,6 @@ const router = createBrowserRouter(
       <Route index element={<ExamPage />} />
       <Route path="profile" element={<ProfilePage />} />
       <Route path="results" element={<ResultsPage />} />
-      <Route path="previous-results" element={<PreviousResultsPage />} />
     </Route>,
     <Route path="/admin" element={<AdminProtected><RootLayout /></AdminProtected>}>
       <Route index element={<Admin />} />
