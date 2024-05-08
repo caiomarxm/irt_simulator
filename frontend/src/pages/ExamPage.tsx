@@ -1,5 +1,7 @@
 import {
+  Divider,
   Flex,
+  Heading,
   Spinner,
   Tab,
   TabList,
@@ -55,7 +57,11 @@ export const ExamPage = () => {
 
         <TabPanels>
           <TabPanel>
-            <Text mb={5}>Some informational data about the quiz here</Text>
+            <Heading as="h3" fontSize="1.2rem" mb={5}>NHE - National Highschool Exam.</Heading>
+            <Text>This exam is a quiz composed of 10 objective questions.</Text>
+            <Text>You can save your progress and leave at anytime while the exam is open for submission.</Text>
+            <Text mb={5}>But keep in mind that you can only submit the exam once.</Text>
+            <Divider />
             <Text>{text}</Text>
           </TabPanel>
 
