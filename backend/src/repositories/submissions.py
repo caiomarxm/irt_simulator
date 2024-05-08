@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from sqlmodel import Session, select
+from sqlmodel import Session, select, and_
 from typing import List, Optional
 
 from models.submissions import (
@@ -28,7 +28,7 @@ def create_submission(
 
     submission_in_dict = submission_in.model_dump()
     submission_in_dict.pop('answers')
-    
+
     submission = Submission(**submission_in_dict, user=user, exam=exam)
     session.add(submission)
 
@@ -77,3 +77,9 @@ def read_all_submissions(*, user_id: int, is_superuser: bool, year: Optional[int
     ).all()
 
     return submissions
+
+
+def read_user_submission_for_year(*, user_id: int, year: int, session: Session) -> Submission:
+    statement = select(Submission).join(Exam).where(and_(Submission.user_id==user_id, Exam.year==year))
+    submission = session.exec(statement=statement).one_or_none()
+    return submission
