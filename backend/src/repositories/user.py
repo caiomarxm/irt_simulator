@@ -13,6 +13,12 @@ def create_user(user_in: UserCreate, session: Session) -> User:
     user_in = User.model_validate(
         user_in, update={"hashed_password": hash_password(password=user_in.password)}
         )
+    
+    check_email_duplicate = select(User).where(User.email == user_in.email)
+    db_user = session.exec(check_email_duplicate).one_or_none()
+
+    if db_user:
+        raise ValueError(f"User with email {user_in.email} already registered on the platform")
 
     session.add(user_in)
     session.commit()

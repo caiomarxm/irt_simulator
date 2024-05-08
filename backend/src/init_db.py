@@ -12,6 +12,7 @@ from repositories.user import create_user
 
 
 SAMPLE_EXAM_FILE = '../sample/exam.json'
+SAMPLE_USERS_FILE = '../sample/users.json'
 
 
 logging.basicConfig(level=logging.INFO)
@@ -35,6 +36,14 @@ def init_db(session: Session) -> None:
 
         # TO-DO: create user
         create_user(user_in=user_in, session=session)
+
+
+def create_users(session: Session):
+    with open(SAMPLE_USERS_FILE) as file:
+        users_dict = json.load(file)
+        for user_dict in users_dict:
+            user = UserCreate(**user_dict)
+            create_user(user_in=user, session=session)
 
 
 def create_first_exam(session: Session):
@@ -63,6 +72,7 @@ def create_first_exam(session: Session):
             session.add_all(sample_questions)
             session.commit()
         
+        # CREATING SUBMISSIONS
         db_submission = session.exec(select(Submission).where(Submission.exam_id == sample_exam.id)).first()
 
         if not db_submission:
@@ -84,6 +94,7 @@ def init() -> None:
     with Session(engine) as session:
         logger.info(f"Creating db...")
         init_db(session=session)
+        create_users(session=session)
         create_first_exam(session=session)
         logger.info(f"Db created")
 
