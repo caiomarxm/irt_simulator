@@ -11,6 +11,7 @@ import { UserPublic } from "../client/models/user";
 import { UnlockIcon } from "@chakra-ui/icons";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { colors } from "../theme";
 
 export const AvatarMenu = () => {
   const userDataString = localStorage.getItem("userData");
@@ -27,7 +28,7 @@ export const AvatarMenu = () => {
   return (
     <Menu>
       <MenuButton>
-        <Avatar />
+        <Avatar bg={colors.background} />
       </MenuButton>
       <MenuList>
         <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem>
