@@ -5,6 +5,8 @@ from sqlmodel import select
 from typing import List, Optional
 
 from core.deps import InjectCurrentUser, InjectSession
+
+from services.submissions import SubmissionsService
 from repositories import submissions as submissions_repo
 from models.submissions import (
     SubmissionBase,
@@ -50,66 +52,21 @@ def create_or_update_submission(
     user: InjectCurrentUser,
     response: Response
 ) -> SubmissionOut:
+
     exam = session.exec(select(Exam).where(
         Exam.year == submission_in.exam_year)).first()
 
     if not exam or exam.is_closed:
         raise HTTPException(
-            status_code=400,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Trying to submit for invalid or closed exam."
         )
 
-    # Check if there's any submission. If so, overwrites
-    # is_superuser set to false because each individual can only has one active submission
-    db_submissions: List[Submission] = submissions_repo.read_all_submissions(
-        user_id=user.id,
-        is_superuser=False,
-        year=submission_in.exam_year,
-        session=session
+    result = SubmissionsService.create_or_update_submission(
+        submission_in=submission_in, user=user, session=session, exam=exam
     )
 
-    if not db_submissions:
-        submission = submissions_repo.create_submission(
-            submission_in=submission_in,
-            answers=submission_in.answers,
-            user=user,
-            exam=exam,
-            session=session
-        )
-        response.status_code = status.HTTP_201_CREATED
-        return submission
+    if result.operation == 'create':
+        response.status_code = 201
 
-    # Overwriting logic, this could be extracted to other function
-    assert len(db_submissions) <= 1
-    db_submission = db_submissions[0]
-
-    if db_submission.is_commited:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=f"Trying to overwrite an already comitted submission."
-        )
-
-    db_submission.is_commited = submission_in.is_commited
-
-    # TODO: Refactor this loop to extract db logic
-    for answer in submission_in.answers:
-        db_answer: Answer = db_submission.find_answer_index_by_question_id(
-            answer.question_id)
-
-        if not db_answer:
-            session.add(
-                Answer(
-                    question_id=answer.question_id,
-                    response_index=answer.response_index,
-                    submission=db_submission
-                )
-            )
-
-        elif db_answer.response_index != answer.response_index:
-            db_answer.response_index = answer.response_index
-            session.add(db_answer)
-
-    session.commit()
-    session.refresh(db_submission)
-
-    return db_submission
+    return result.submission
