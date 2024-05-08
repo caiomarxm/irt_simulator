@@ -4,6 +4,7 @@ export interface ISubmission {
   id: number | undefined | null;
   user_id: number | undefined | null;
   exam_id: number | undefined | null;
+  result: number | undefined | null;
   is_commited: boolean | undefined;
   answers: IAnswer[] | null;
 }
