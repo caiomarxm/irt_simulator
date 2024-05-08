@@ -1,3 +1,4 @@
+from sqlmodel import SQLModel
 from typing import Optional, List
 
 from models.submissions import SubmissionBase
@@ -18,3 +19,8 @@ class SubmissionIn(SubmissionBase):
     exam_id: Optional[int] = None
 
     answers: Optional[List[AnswerBase]]
+
+
+class SubmissionCreateOrUpdateResult(SQLModel):
+    operation: str
+    submission: SubmissionOut
