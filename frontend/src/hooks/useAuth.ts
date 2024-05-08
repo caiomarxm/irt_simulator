@@ -13,9 +13,10 @@ const isLoggedIn = () => {
   return localStorage.getItem("accessToken") !== null
 }
 
-const isAdminLoggedIn = async () => {
-  const user = (await UserService.readUserMe()).data
-  return user.is_superuser
+const isAdminLoggedIn = () => {
+  const userString = localStorage.getItem("userData")
+  const user = userString ? JSON.parse(userString) : null
+  return user?.is_superuser
 }
 
 
