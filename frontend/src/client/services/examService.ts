@@ -14,4 +14,25 @@ export class ExamService {
         `/exams?${filters}`
     )
   }
+
+  public static openExam(id: number): AxiosPromise<IExam> {
+    return httpClient.put(
+      `/exams/${id}`,
+      {is_closed: false}
+    )
+  }
+
+  public static closeExam(id: number): AxiosPromise<IExam> {
+    return httpClient.put(
+      `/exams/${id}`,
+      {is_closed: true}
+    )
+  }
+
+  public static commitExam(id: number): AxiosPromise<IExam> {
+    return httpClient.post(
+      `/exams/${id}/commit`,
+      {is_closed: true, is_committed: true}
+    )
+  }
 }
