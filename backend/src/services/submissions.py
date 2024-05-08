@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 from sqlmodel import Session, select
-from typing import List, Any
+from typing import List, Optional
 
 from services.submissions_result import SubmissionsResultService
 from models import (
@@ -70,6 +70,50 @@ class SubmissionsService:
 
         session.commit()
         session.refresh(db_submission)
+
+        return SubmissionCreateOrUpdateResult(operation='update', submission=db_submission)
+
+    @staticmethod
+    def commit_all_submissions(year: int, session: Session) -> List[Submission]:
+        """Commits every submission for selected year, calculating results"""
+
+        submissions = submissions_repo.read_all_submissions(
+            is_superuser=True,
+            year=year,
+            session=session
+        )
+
+        for submission in submissions:
+            SubmissionsService.calculate_result_and_commit(
+                submission=submission,
+                session=session
+            )
+        
+        return submissions
+
+    @staticmethod
+    def calculate_result_and_commit(
+        session: Session,
+        submission_id: Optional[int] = None,
+        submission: Optional[Submission] = None,
+    ) -> Submission:
+        if not submission:
+            submission = submissions_repo.read_submission_by_id(
+                submission_id=submission_id)
+        
+        if submission.is_commited and submission.result:
+            return submission
+
+        result = SubmissionsService.calculate_result(
+            submission=submission, session=session)
+
+        submission.result = result
+        submission.is_commited = True
+
+        submission = submissions_repo.update_submission(
+            updated_submission=submission, submission=submission, session=session)
+        
+        return submission
 
     @staticmethod
     def calculate_result(submission: Submission, session: Session):
