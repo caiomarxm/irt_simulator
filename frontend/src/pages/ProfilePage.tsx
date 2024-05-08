@@ -12,8 +12,8 @@ export const ProfilePage = () => {
   const { user, isLoading } = useAuth()
 
   useEffect(() => {
-    setEmail(user?.email)
-    setName(user?.full_name)
+    setEmail(user?.data.email)
+    setName(user?.data.full_name)
   }, [setEmail, setName, user])
 
   if ( isLoading ) {
