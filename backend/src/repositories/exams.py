@@ -1,6 +1,7 @@
 from sqlmodel import Session, select
 
-from models.exams import Exam, ExamCreate, ExamUpdate
+from models import Exam, ExamCreate, ExamUpdate
+from models import Submission
 
 
 def create_exam(exam: ExamCreate, session: Session) -> Exam:
@@ -43,6 +44,7 @@ def update_exam(updated_exam: ExamUpdate, session: Session, exam: Exam) -> Exam:
 
 def commit_exam(exam: Exam, session: Session) -> Exam:
     exam.is_committed = True
+    exam.is_closed = True
     session.add(exam)
     session.commit()
     session.refresh(exam)
