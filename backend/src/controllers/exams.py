@@ -12,6 +12,7 @@ from models.exams import (
     ExamUpdate
 )
 from services.submissions import SubmissionsService
+from services.exams import ExamsSevice
 
 
 router = APIRouter()
@@ -66,6 +67,19 @@ def update_exam(exam_id: int, exam_update: ExamUpdate, session: InjectSession, u
     db_exam = exams_repo.update_exam(
         updated_exam=exam_update, session=session, exam=db_exam)
     return db_exam
+
+
+@router.post('/{exam_id}/commit')
+def commit_exam_and_calculate_results(
+    exam_id: int,
+    user: InjectIsSuperuser,
+    session: InjectSession
+) -> Exam:
+    """Commits the exam, calculating results for all submissions"""
+    return ExamsSevice.commit_exam_and_calculate_results(
+        exam_id=exam_id,
+        session=session
+    )
 
 
 @router.post('/{id}/calculate-results')
