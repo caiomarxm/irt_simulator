@@ -1,6 +1,6 @@
 from sqlmodel import Session, select
 from core.db import engine
-from backend.src.services.submissions_result import SubmissionsResultService, Answer, Submission
+from services.submissions_result import SubmissionsResultService, Answer, Submission
 
 from models import *
 
@@ -14,4 +14,4 @@ def test_submission_service():
             assert Submission.model_validate(submission)
             submission.answers = answers
             result = SubmissionsResultService.calculate_submission_result(submission=submission)
-            return result
+            assert result
