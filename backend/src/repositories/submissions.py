@@ -64,7 +64,7 @@ def read_submission_by_id(submission_id: int, session: Session) -> Submission | 
     return submission
 
 
-def read_all_submissions(*, user_id: int, is_superuser: bool, year: Optional[int] = None, session: Session) -> List[Submission]:
+def read_all_submissions(*, user_id: Optional[int] = None, is_superuser: bool, year: Optional[int] = None, session: Session) -> List[Submission]:
     query = select(Submission).join(Exam)
 
     if year:
@@ -80,6 +80,7 @@ def read_all_submissions(*, user_id: int, is_superuser: bool, year: Optional[int
 
 
 def read_user_submission_for_year(*, user_id: int, year: int, session: Session) -> Submission:
-    statement = select(Submission).join(Exam).where(and_(Submission.user_id==user_id, Exam.year==year))
+    statement = select(Submission).join(Exam).where(
+        and_(Submission.user_id == user_id, Exam.year == year))
     submission = session.exec(statement=statement).one_or_none()
     return submission
