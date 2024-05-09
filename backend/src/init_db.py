@@ -42,8 +42,11 @@ def create_users(session: Session):
     with open(SAMPLE_USERS_FILE) as file:
         users_dict = json.load(file)
         for user_dict in users_dict:
-            user = UserCreate(**user_dict)
-            create_user(user_in=user, session=session)
+            try:
+                user = UserCreate(**user_dict)
+                create_user(user_in=user, session=session)
+            except ValueError:
+                pass
 
 
 def create_first_exam(session: Session):
